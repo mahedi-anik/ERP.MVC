@@ -2,6 +2,7 @@ using ERP.MVC.Domain.Interfaces;
 using ERP.MVC.Infrastructure.Middleware;
 using ERP.MVC.Infrastructure.Persistence;
 using ERP.MVC.Infrastructure.Repositories;
+using ERP.MVC.Infrastructure.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,9 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog(); // Use Serilog for logging
 
+// Register the TokenService
+builder.Services.AddScoped<ITokenService, TokenService>();
+
 // Configure database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -34,6 +38,11 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Register repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+//builder.Services.AddScoped<IMenuService, MenuService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+//builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
 // Add services to the container.
