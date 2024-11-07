@@ -1,3 +1,5 @@
+using ERP.MVC.Application.Mappers;
+using ERP.MVC.Application.Queries.Company;
 using ERP.MVC.Domain.Interfaces;
 using ERP.MVC.Infrastructure.Middleware;
 using ERP.MVC.Infrastructure.Persistence;
@@ -6,6 +8,7 @@ using ERP.MVC.Infrastructure.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +24,8 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog(); // Use Serilog for logging
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 // Register the TokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -30,9 +35,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetCompaniesQueryHandler).Assembly));
+
 
 // Add AutoMapper
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Add FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();

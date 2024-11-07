@@ -1,15 +1,18 @@
 ﻿using ERP.MVC.Domain.Entities.MasterData;
 using ERP.MVC.Domain.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace ERP.MVC.Application.Commands.Companies
 {
     public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, string>
     {
         private readonly ICompanyRepository _repository;
-        public CreateCompanyCommandHandler(ICompanyRepository repository)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CreateCompanyCommandHandler(ICompanyRepository repository, IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<string> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
         {
@@ -23,7 +26,7 @@ namespace ERP.MVC.Application.Commands.Companies
                 Address = request.Address,
                 IsActive=request.IsActive,
                 ImageURL = request.ImageURL,
-
+                CreatedBy = _httpContextAccessor.HttpContext?.User.Identity?.Name ?? "Unknown"
             };
 
             await _repository.AddAsync(company);

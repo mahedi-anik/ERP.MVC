@@ -17,6 +17,7 @@ namespace ERP.MVC.Application.Mappers
 
             CreateMap<Company, CompanyDto>();
             CreateMap<CreateCompanyCommand, Company>();
+            CreateMap<UpdateCompanyCommand, Company>();
         }
     }
 
