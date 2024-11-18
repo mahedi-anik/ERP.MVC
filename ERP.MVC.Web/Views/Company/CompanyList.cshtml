@@ -6,45 +6,46 @@
 
 <div class="row">
     <ol class="breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
-        <li class="breadcrumb-item">
-            <a href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-            </a>
-        </li>
         <li class="breadcrumb-item"><a href="#">Home</a></li>
         <li class="breadcrumb-item"><a href="#">Company Profile</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><a href="#">Copmany View</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="#">Company List</a></li>
     </ol>
 </div>
+
 <div class="row">&nbsp;</div>
 <div class="col-12">
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Company List</h3>
-            &nbsp;<a asp-controller="Company" asp-action="CompanyView" class="btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 2l.324 .001l.318 .004l.616 .017l.299 .013l.579 .034l.553 .046c4.785 .464 6.732 2.411 7.196 7.196l.046 .553l.034 .579c.005 .098 .01 .198 .013 .299l.017 .616l.005 .642l-.005 .642l-.017 .616l-.013 .299l-.034 .579l-.046 .553c-.464 4.785 -2.411 6.732 -7.196 7.196l-.553 .046l-.579 .034c-.098 .005 -.198 .01 -.299 .013l-.616 .017l-.642 .005l-.642 -.005l-.616 -.017l-.299 -.013l-.579 -.034l-.553 -.046c-4.785 -.464 -6.732 -2.411 -7.196 -7.196l-.046 -.553l-.034 -.579a28.058 28.058 0 0 1 -.013 -.299l-.017 -.616c-.003 -.21 -.005 -.424 -.005 -.642l.001 -.324l.004 -.318l.017 -.616l.013 -.299l.034 -.579l.046 -.553c.464 -4.785 2.411 -6.732 7.196 -7.196l.553 -.046l.579 -.034c.098 -.005 .198 -.01 .299 -.013l.616 -.017c.21 -.003 .424 -.005 .642 -.005zm0 6a1 1 0 0 0 -1 1v2h-2l-.117 .007a1 1 0 0 0 .117 1.993h2v2l.007 .117a1 1 0 0 0 1.993 -.117v-2h2l.117 -.007a1 1 0 0 0 -.117 -1.993h-2v-2l-.007 -.117a1 1 0 0 0 -.993 -.883z" fill="currentColor" stroke-width="0" /></svg></a>
+            &nbsp;<a asp-controller="Company" asp-action="CompanyView" class="btn btn-success">Add New Company</a>
         </div>
         <div class="card-body border-bottom py-3">
-            <div class="d-flex">
-                <div class="text-secondary">
-                    Show
-                    <div class="mx-2 d-inline-block">
-                        <input type="text" class="form-control form-control-sm" value="8" size="3" aria-label="Companies count">
+            <form method="get" asp-action="CompanyList">
+                <div class="d-flex">
+                    <div class="text-secondary">
+                        Show
+                        <div class="mx-2 d-inline-block">
+                            <input type="text" name="pageSize" class="form-control form-control-sm" value="@ViewBag.PageSize" size="3" aria-label="Companies count">
+                        </div>
+                        entries
                     </div>
-                    entries
-                </div>
-                <div class="ms-auto text-secondary">
-                    Search:
-                    <div class="ms-2 d-inline-block">
-                        <input type="text" class="form-control form-control-sm" aria-label="Search company">
+                    <div class="ms-auto text-secondary">
+                        Search:
+                        <div class="ms-2 d-inline-block">
+                            <input type="text" name="search" class="form-control form-control-sm" value="@ViewBag.SearchQuery" aria-label="Search company">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm ms-2">Search</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="table-responsive">
             <table class="table card-table table-vcenter text-nowrap datatable">
                 <thead>
                     <tr>
-                        <th>Company Name</th>
+                        <th >
+                            <a href="javascript:void(0);" onclick="sort('CompanyName')">Company Name</a>
+                        </th>
                         <th>Mobile No</th>
                         <th>Email</th>
                         <th>Address</th>
@@ -62,9 +63,8 @@
                             <td>@company.Address</td>
                             <td>@(company.IsActive ? "Active" : "Inactive")</td>
                             <td>
-                                <a asp-controller="Company" asp-action="CompanyView" asp-route-id="@company.Id" class="btn-warning">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg></a>
-                                <a asp-action="Delete" asp-route-id="@company.Id" class=" btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg></a>
+                                <a asp-controller="Company" asp-action="CompanyView" asp-route-id="@company.Id" class="btn btn-warning">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@company.Id" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                     }
@@ -72,22 +72,29 @@
             </table>
         </div>
         <div class="card-footer d-flex align-items-center">
-            <p class="m-0 text-secondary">Showing <span>1</span> to <span>8</span> of <span>16</span> entries</p>
+            <p class="m-0 text-secondary">Showing <span>@(ViewBag.CurrentPage * ViewBag.PageSize - (ViewBag.PageSize - 1))</span> to <span>@(ViewBag.CurrentPage * ViewBag.PageSize > ViewBag.TotalEntries ? ViewBag.TotalEntries : ViewBag.CurrentPage * ViewBag.PageSize)</span> of <span>@ViewBag.TotalEntries</span> entries</p>
             <ul class="pagination m-0 ms-auto">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                        prev
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">next</a>
-                </li>
+                @for (int i = 1; i <= (int)Math.Ceiling((double)ViewBag.TotalEntries / ViewBag.PageSize); i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="CompanyList" asp-route-page="@i" asp-route-search="@ViewBag.SearchQuery" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                    </li>
+                }
             </ul>
         </div>
     </div>
 </div>
+<script>
+    function sort(field) {
+        var currentSortField = '@ViewBag.SortField';
+        var currentSortOrder = '@ViewBag.SortOrder';
+        var newSortOrder = currentSortField === field && currentSortOrder === 'asc' ? 'desc' : 'asc';
+
+        window.location.href = '@Url.Action("CompanyList", "Company")' +
+            '?search=' + '@ViewBag.SearchQuery' +
+            '&page=' + '@ViewBag.CurrentPage' +
+            '&pageSize=' + '@ViewBag.PageSize' +
+            '&sortField=' + field +
+            '&sortOrder=' + newSortOrder;
+    }
+</script>

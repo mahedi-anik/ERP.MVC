@@ -1,0 +1,56 @@
+﻿@model SearchPaginationModel
+
+<div class="d-flex">
+    <div class="text-secondary">
+        Show
+        <div class="mx-2 d-inline-block">
+            <select class="form-control form-control-sm" id="pageSize" onchange="submitForm()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+        entries
+    </div>
+    <div class="ms-auto text-secondary">
+        Search:
+        <div class="ms-2 d-inline-block">
+            <input type="text" id="searchQuery" class="form-control form-control-sm" value="@Model.SearchQuery" aria-label="Search company" oninput="submitForm()">
+        </div>
+    </div>
+</div>
+
+<div class="card-footer d-flex align-items-center">
+    <p class="m-0 text-secondary">Showing <span>@(Model.CurrentPage * Model.PageSize - (Model.PageSize - 1))</span> to <span>@(Model.CurrentPage * Model.PageSize > Model.TotalEntries ? Model.TotalEntries : Model.CurrentPage * Model.PageSize)</span> of <span>@Model.TotalEntries</span> entries</p>
+    <ul class="pagination m-0 ms-auto">
+        @for (int i = 1; i <= (int)Math.Ceiling((double)Model.TotalEntries / Model.PageSize); i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                <a class="page-link" href="javascript:void(0);" onclick="setPage(@i)">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+
+<script>
+    function submitForm() {
+        var searchQuery = document.getElementById("searchQuery").value;
+        var pageSize = document.getElementById("pageSize").value;
+        var currentPage = @Model.CurrentPage;
+
+        window.location.href = '@Url.Action("CompanyList", "Company")' +
+            '?search=' + searchQuery +
+            '&page=' + currentPage +
+            '&pageSize=' + pageSize;
+    }
+
+    function setPage(page) {
+        document.getElementById("searchQuery").value = "@Model.SearchQuery"; // Retain search query
+        document.getElementById("pageSize").value = "@Model.PageSize"; // Retain page size
+        submitForm();
+    }
+</script>
