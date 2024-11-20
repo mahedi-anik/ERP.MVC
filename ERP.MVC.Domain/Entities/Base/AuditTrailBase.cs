@@ -22,6 +22,7 @@ namespace ERP.MVC.Domain.Entities.Base
 
         [Required]
         public bool IsActive { get; set; }
+        public bool? IsDelete { get; set; }
     }
 
 }

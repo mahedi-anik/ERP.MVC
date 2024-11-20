@@ -1,4 +1,5 @@
-﻿@model List<ERP.MVC.Application.DTOs.CompanyDto>
+﻿@using Newtonsoft.Json;
+@model List<ERP.MVC.Application.DTOs.CompanyDto>
 
 @{
     ViewData["Title"] = "Company List";
@@ -11,6 +12,20 @@
         <li class="breadcrumb-item active" aria-current="page"><a href="#">Company List</a></li>
     </ol>
 </div>
+<!-- Alert Section -->
+@{
+    var alertMessageJson = TempData["AlertMessage"] as string;
+    AlertMessage alertMessage = null;
+
+    if (!string.IsNullOrEmpty(alertMessageJson))
+    {
+        alertMessage = JsonConvert.DeserializeObject<AlertMessage>(alertMessageJson); // Deserialize from JSON
+    }
+}
+@if (alertMessage != null)
+{
+    @await Html.PartialAsync("_Alert", alertMessage)
+}
 
 <div class="row">&nbsp;</div>
 <div class="col-12">
@@ -43,7 +58,7 @@
             <table class="table card-table table-vcenter text-nowrap datatable">
                 <thead>
                     <tr>
-                        <th >
+                        <th>
                             <a href="javascript:void(0);" onclick="sort('CompanyName')">Company Name</a>
                         </th>
                         <th>Mobile No</th>
@@ -63,8 +78,9 @@
                             <td>@company.Address</td>
                             <td>@(company.IsActive ? "Active" : "Inactive")</td>
                             <td>
-                                <a asp-controller="Company" asp-action="CompanyView" asp-route-id="@company.Id" class="btn btn-warning">Edit</a>
-                                <a asp-action="Delete" asp-route-id="@company.Id" class="btn btn-danger">Delete</a>
+                                <a asp-controller="Company" asp-action="Edit" asp-route-id="@company.Id" class="btn btn-warning">Edit</a>
+                                <a asp-controller="Company" asp-action="Delete" asp-route-id="@company.Id" class="btn btn-danger">Delete</a>
+                                
                             </td>
                         </tr>
                     }
@@ -97,4 +113,5 @@
             '&sortField=' + field +
             '&sortOrder=' + newSortOrder;
     }
+   
 </script>

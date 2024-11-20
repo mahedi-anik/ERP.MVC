@@ -9,6 +9,7 @@ namespace ERP.MVC.Domain.Interfaces
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(string id);
+        Task IsDeleteAsync(string id);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
     }
 }

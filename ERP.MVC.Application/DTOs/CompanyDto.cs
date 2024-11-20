@@ -15,5 +15,6 @@ namespace ERP.MVC.Application.DTOs
         public string? Address { get; set; }
         public string? ImageURL { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDelete { get; set; }
     }
 }

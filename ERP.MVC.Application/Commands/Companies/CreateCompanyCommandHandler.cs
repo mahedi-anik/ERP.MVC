@@ -26,6 +26,7 @@ namespace ERP.MVC.Application.Commands.Companies
                 Address = request.Address,
                 IsActive=request.IsActive,
                 ImageURL = request.ImageURL,
+                IsDelete=true,
                 CreatedBy = _httpContextAccessor.HttpContext?.User.Identity?.Name ?? "Unknown"
             };
 

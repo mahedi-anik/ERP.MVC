@@ -1,0 +1,27 @@
+﻿@model AlertMessage
+
+@if (Model != null)
+{
+    <div class="alert alert-@Model.AlertType m-0">
+        @if (Model.AlertType == "danger")
+        {
+            @Html.Raw(Model.Message)
+        }
+        else
+        {
+            <h4 class="alert-title">Wow! Everything worked!</h4>
+            <div class="text-secondary">@Html.Raw(Model.Message)</div>
+        }
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            var alertElement = document.getElementById('alert');
+            if (alertElement) {
+                var bsAlert = new bootstrap.Alert(alertElement);
+                bsAlert.close();
+            }
+        }, 5000);
+    </script>
+}

@@ -18,7 +18,7 @@ namespace ERP.MVC.Infrastructure.Repositories
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.Where(x => EF.Property<bool>(x, "IsDelete") == true).ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(string id)
@@ -51,6 +51,20 @@ namespace ERP.MVC.Infrastructure.Repositories
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public async Task IsDeleteAsync(string id)
+        {
+            var entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                var property = _context.Entry(entity).Property("IsDelete");
+                if (property != null)
+                {
+                    property.CurrentValue = false;
+                    await _context.SaveChangesAsync();
+                }
+            }
         }
     }
 }

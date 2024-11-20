@@ -1,8 +1,10 @@
 ﻿using ERP.MVC.Application.Commands.Companies;
 using ERP.MVC.Application.DTOs;
 using ERP.MVC.Application.Queries.Company;
+using ERP.MVC.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ERP.MVC.Web.Controllers
 {
@@ -91,41 +93,49 @@ namespace ERP.MVC.Web.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var company = await _mediator.Send(new GetCompanyByIdQuery { Id = id });
-            if (company == null) return NotFound();
-
-            return View(company);
+            if (company == null)
+                return NotFound();
+            return View("CompanyView", company);
         }
 
         // POST: Company/Edit/{id}
         [HttpPost]
         public async Task<IActionResult> Edit(string id, [FromForm] CompanyDto companyDto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var command = new CreateCompanyCommand
-                {
-                    CompanyName = companyDto.CompanyName,
-                    MobileNo = companyDto.MobileNo,
-                    Email = companyDto.Email,
-                    Address = companyDto.Address,
-                    IsActive = companyDto.IsActive,
-                    ImageURL = companyDto.ImageURL
-                };
-                await _mediator.Send(command);
-                return RedirectToAction("CompanyList");
+                return View(companyDto);
             }
 
-            return View(companyDto);
+            var command = new UpdateCompanyCommand
+            {
+                Id = id,
+                CompanyName = companyDto.CompanyName,
+                MobileNo = companyDto.MobileNo,
+                Email = companyDto.Email,
+                Address = companyDto.Address,
+                IsActive = companyDto.IsActive,
+                ImageURL = companyDto.ImageURL
+            };
+
+            await _mediator.Send(command);
+            var alertMessage = new AlertMessage { Message = "Update has been saved!", AlertType = "success" };
+            TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage); // Serialize to JSON
+            return RedirectToAction("CompanyList");
         }
 
-        // GET: Company/Delete/{id}
+        /// GET: Company/Delete/{id}
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
             var company = await _mediator.Send(new GetCompanyByIdQuery { Id = id });
             if (company == null) return NotFound();
 
-            return View(company);
+            // You may want to redirect to the DeleteConfirmed action directly here or show a confirmation page
+            await _mediator.Send(new DeleteCompanyCommand { Id = id });
+            var alertMessage = new AlertMessage { Message = "This is a danger alert — Id was deleted!", AlertType = "danger" };
+            TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage); // Serialize to JSON
+            return RedirectToAction("CompanyList");
         }
 
         // POST: Company/Delete/{id}
@@ -135,7 +145,9 @@ namespace ERP.MVC.Web.Controllers
             await _mediator.Send(new DeleteCompanyCommand { Id = id });
             return RedirectToAction("CompanyList");
         }
+
     }
+
 
 
 }
