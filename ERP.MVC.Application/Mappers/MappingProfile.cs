@@ -16,7 +16,8 @@ namespace ERP.MVC.Application.Mappers
             CreateMap<RoleDto, Role>();
 
             CreateMap<Company, CompanyDto>();
-            CreateMap<CreateCompanyCommand, Company>();
+            CreateMap<CreateCompanyCommand, Company>()
+                .ForMember(dest => dest.IsDelete, opt => opt.MapFrom(src => true));
             CreateMap<UpdateCompanyCommand, Company>();
         }
     }

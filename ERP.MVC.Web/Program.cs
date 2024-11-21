@@ -1,3 +1,4 @@
+using ERP.MVC.Application.Commands.Companies;
 using ERP.MVC.Application.Mappers;
 using ERP.MVC.Application.Queries.Company;
 using ERP.MVC.Domain.Interfaces;
@@ -6,9 +7,8 @@ using ERP.MVC.Infrastructure.Persistence;
 using ERP.MVC.Infrastructure.Repositories;
 using ERP.MVC.Infrastructure.Services;
 using FluentValidation;
-using MediatR;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +36,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetCompaniesQueryHandler).Assembly));
+
+// Register FluentValidation with ASP.NET Core DI
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCompanyCommandValidator>());
 
 
 // Add AutoMapper

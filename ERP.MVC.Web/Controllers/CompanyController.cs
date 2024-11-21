@@ -38,6 +38,11 @@ namespace ERP.MVC.Web.Controllers
                         ? filteredCompanies.OrderBy(c => c.CompanyName).ToList()
                         : filteredCompanies.OrderByDescending(c => c.CompanyName).ToList();
                     break;
+                case "MobileNo":
+                    filteredCompanies = sortOrder == "asc"
+                        ? filteredCompanies.OrderBy(c => c.MobileNo).ToList()
+                        : filteredCompanies.OrderByDescending(c => c.MobileNo).ToList();
+                    break;
                 case "Email":
                     filteredCompanies = sortOrder == "asc"
                         ? filteredCompanies.OrderBy(c => c.Email).ToList()
@@ -66,7 +71,7 @@ namespace ERP.MVC.Web.Controllers
             return View(new CompanyDto());
         }
 
-        // POST: Company/Company-View
+        //POST: Company/Company-View     
         [HttpPost]
         public async Task<IActionResult> CompanyView([FromForm] CompanyDto companyDto)
         {
@@ -81,12 +86,22 @@ namespace ERP.MVC.Web.Controllers
                     IsActive = companyDto.IsActive,
                     ImageURL = companyDto.ImageURL
                 };
-                var companyId = await _mediator.Send(command);
-                return RedirectToAction("CompanyList");
+
+                var result = await _mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction("CompanyList");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
             }
 
             return View(companyDto);
         }
+
 
         // GET: Company/Edit/{id}
         [HttpGet]

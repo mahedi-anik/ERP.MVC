@@ -20,6 +20,20 @@
     </ol>
 </div>
 <div class="row">&nbsp;</div>
+<!-- Display Validation Summary -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+        <!-- Close button -->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <div class="row row-cards">
     <div class="col-12">
         <div class="card">
@@ -97,3 +111,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+

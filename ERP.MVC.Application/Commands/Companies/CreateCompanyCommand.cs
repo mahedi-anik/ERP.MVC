@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using ERP.MVC.Application.Models;
+using MediatR;
 
 namespace ERP.MVC.Application.Commands.Companies
 {
-    public class CreateCompanyCommand : IRequest<string>
+    public class CreateCompanyCommand : IRequest<Result<string>>
     {
         public string? CompanyName { get; set; }
         public string? MobileNo { get; set; }
