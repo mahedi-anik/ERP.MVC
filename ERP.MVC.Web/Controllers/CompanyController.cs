@@ -48,7 +48,16 @@ namespace ERP.MVC.Web.Controllers
                         ? filteredCompanies.OrderBy(c => c.Email).ToList()
                         : filteredCompanies.OrderByDescending(c => c.Email).ToList();
                     break;
-                    // Add more cases for other fields as needed
+                case "Address":
+                    filteredCompanies = sortOrder == "asc"
+                        ? filteredCompanies.OrderBy(c => c.Address).ToList()
+                        : filteredCompanies.OrderByDescending(c => c.Address).ToList();
+                    break;
+                case "IsActive":
+                    filteredCompanies = sortOrder == "asc"
+                        ? filteredCompanies.OrderBy(c => c.IsActive).ToList()
+                        : filteredCompanies.OrderByDescending(c => c.IsActive).ToList();
+                    break;
             }
 
             var totalEntries = filteredCompanies.Count();
