@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace ERP.MVC.Application.Commands.Companies
 {
@@ -10,6 +11,7 @@ namespace ERP.MVC.Application.Commands.Companies
         public string Email { get; set; }
         public string Address { get; set; }
         public bool IsActive { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public string ImageURL { get; set; }
         public bool IsDelete { get; set; }
     }

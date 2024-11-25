@@ -93,7 +93,7 @@ namespace ERP.MVC.Web.Controllers
                     Email = companyDto.Email,
                     Address = companyDto.Address,
                     IsActive = companyDto.IsActive,
-                    ImageURL = companyDto.ImageURL
+                    ImageFile = companyDto.ImageFile
                 };
 
                 var result = await _mediator.Send(command);
@@ -139,7 +139,7 @@ namespace ERP.MVC.Web.Controllers
                 Email = companyDto.Email,
                 Address = companyDto.Address,
                 IsActive = companyDto.IsActive,
-                ImageURL = companyDto.ImageURL
+                ImageFile = companyDto.ImageFile
             };
 
             await _mediator.Send(command);

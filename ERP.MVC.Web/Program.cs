@@ -28,6 +28,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Register the TokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 // Configure database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

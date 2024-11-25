@@ -1,35 +1,53 @@
-﻿using ERP.MVC.Domain.Interfaces;
+﻿using AutoMapper;
+using ERP.MVC.Domain.Enums;
+using ERP.MVC.Domain.Interfaces;
+using ERP.MVC.Infrastructure.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ERP.MVC.Application.Commands.Companies
 {
     public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand, string>
     {
         private readonly ICompanyRepository _repository;
+        private readonly IMapper _mapper;
+        private readonly ILogger<UpdateCompanyCommand> _logger;
+        private readonly IFileUploadService _fileUploadService;
 
-        public UpdateCompanyCommandHandler(ICompanyRepository repository)
+        public UpdateCompanyCommandHandler(ICompanyRepository repository, IMapper mapper, ILogger<UpdateCompanyCommand> logger, IFileUploadService fileUploadService)
         {
             _repository = repository;
+            _mapper = mapper;
+            _logger = logger;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<string> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
         {
-            var company = await _repository.GetByIdAsync(request.Id);
-            if (company == null)
+            try
             {
-                throw new Exception($"Company with ID {request.Id} not found.");
+                var company = await _repository.GetByIdAsync(request.Id);
+                if (company == null)
+                {
+                    throw new Exception($"Company with ID {request.Id} not found.");
+                }
+                if (request.ImageFile != null)
+                {
+                    await _fileUploadService.DeleteFileAsync(company.ImageURL);
+                    var imagePath = await _fileUploadService.UploadFileAsync(request.ImageFile, EntityType.Company);
+                    company.ImageURL = imagePath;
+                }
+
+                _mapper.Map(request, company);
+                await _repository.UpdateAsync(company);
+                return company.Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while handling UpdateCompanyCommand for CompanyName: {CompanyName}", request.CompanyName);
+                throw;
             }
 
-            company.CompanyName = request.CompanyName;
-            company.MobileNo = request.MobileNo;
-            company.Email = request.Email;
-            company.Address = request.Address;
-            company.IsActive = request.IsActive;
-            company.ImageURL = request.ImageURL;
-            company.IsDelete = true;
-
-            await _repository.UpdateAsync(company);
-            return company.Id;
         }
     }
 }

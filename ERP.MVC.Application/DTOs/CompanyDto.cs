@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace ERP.MVC.Application.DTOs
 {
@@ -17,6 +18,7 @@ namespace ERP.MVC.Application.DTOs
         public string? Email { get; set; }
         public string? Address { get; set; }
         public string? ImageURL { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public bool IsActive { get; set; }
         public bool IsDelete { get; set; }
     }
