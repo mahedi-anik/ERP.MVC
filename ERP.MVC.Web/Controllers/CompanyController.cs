@@ -90,9 +90,12 @@ namespace ERP.MVC.Web.Controllers
                 {
                     CompanyName = companyDto.CompanyName,
                     MobileNo = companyDto.MobileNo,
+                    OptionalMobileNo = companyDto.OptionalMobileNo,
+                    TelephoneNo = companyDto.TelephoneNo,
                     Email = companyDto.Email,
                     Address = companyDto.Address,
                     IsActive = companyDto.IsActive,
+                    IsDelete=true,
                     ImageFile = companyDto.ImageFile
                 };
 
@@ -100,6 +103,8 @@ namespace ERP.MVC.Web.Controllers
 
                 if (result.IsSuccess)
                 {
+                    var alertMessage = new AlertMessage { Message = "New Information has been saved!", AlertType = "success" };
+                    TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage);
                     return RedirectToAction("CompanyList");
                 }
                 foreach (var error in result.Errors)
@@ -136,15 +141,18 @@ namespace ERP.MVC.Web.Controllers
                 Id = id,
                 CompanyName = companyDto.CompanyName,
                 MobileNo = companyDto.MobileNo,
+                OptionalMobileNo = companyDto.OptionalMobileNo,
+                TelephoneNo = companyDto.TelephoneNo,
                 Email = companyDto.Email,
                 Address = companyDto.Address,
                 IsActive = companyDto.IsActive,
+                IsDelete=true,
                 ImageFile = companyDto.ImageFile
             };
 
             await _mediator.Send(command);
             var alertMessage = new AlertMessage { Message = "Update has been saved!", AlertType = "success" };
-            TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage); // Serialize to JSON
+            TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage); 
             return RedirectToAction("CompanyList");
         }
 
@@ -155,10 +163,9 @@ namespace ERP.MVC.Web.Controllers
             var company = await _mediator.Send(new GetCompanyByIdQuery { Id = id });
             if (company == null) return NotFound();
 
-            // You may want to redirect to the DeleteConfirmed action directly here or show a confirmation page
             await _mediator.Send(new DeleteCompanyCommand { Id = id });
             var alertMessage = new AlertMessage { Message = "This is a danger alert — Id was deleted!", AlertType = "danger" };
-            TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage); // Serialize to JSON
+            TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage); 
             return RedirectToAction("CompanyList");
         }
 

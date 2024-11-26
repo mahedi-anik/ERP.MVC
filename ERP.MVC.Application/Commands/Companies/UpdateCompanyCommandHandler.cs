@@ -31,14 +31,19 @@ namespace ERP.MVC.Application.Commands.Companies
                 {
                     throw new Exception($"Company with ID {request.Id} not found.");
                 }
+                string newImagePath = null;
+
                 if (request.ImageFile != null)
                 {
                     await _fileUploadService.DeleteFileAsync(company.ImageURL);
-                    var imagePath = await _fileUploadService.UploadFileAsync(request.ImageFile, EntityType.Company);
-                    company.ImageURL = imagePath;
+                    newImagePath = await _fileUploadService.UploadFileAsync(request.ImageFile, EntityType.Company);
                 }
 
                 _mapper.Map(request, company);
+                if (!string.IsNullOrEmpty(newImagePath))
+                {
+                    company.ImageURL = newImagePath;
+                }
                 await _repository.UpdateAsync(company);
                 return company.Id;
             }
@@ -47,7 +52,6 @@ namespace ERP.MVC.Application.Commands.Companies
                 _logger.LogError(ex, "An error occurred while handling UpdateCompanyCommand for CompanyName: {CompanyName}", request.CompanyName);
                 throw;
             }
-
         }
     }
 }

@@ -19,7 +19,7 @@ namespace ERP.MVC.Infrastructure.Services
                 throw new ArgumentException("File cannot be null or empty");
 
             var folderPath = Path.Combine(_wwwRootPath, entityType.ToString());
-            Directory.CreateDirectory(folderPath); // Create directory if it doesn't exist
+            Directory.CreateDirectory(folderPath); 
 
             var fileName = Path.GetFileName(file.FileName);
             var filePath = Path.Combine(folderPath, fileName);
@@ -30,7 +30,7 @@ namespace ERP.MVC.Infrastructure.Services
             }
 
             // Return the relative file path to the file (to be used in the URL)
-            return Path.Combine("uploads", entityType.ToString(), fileName);
+            return Path.Combine("", entityType.ToString(), fileName);
         }
 
         public async Task DeleteFileAsync(string filePath)
