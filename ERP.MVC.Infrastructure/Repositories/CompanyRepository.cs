@@ -7,11 +7,19 @@ namespace ERP.MVC.Infrastructure.Repositories
 {
     public class CompanyRepository : GenericRepository<Company>, ICompanyRepository
     {
+        #region Fields
         private readonly ApplicationDbContext _context;
+
+        #endregion
+
+        #region Ctor
         public CompanyRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
+        #endregion
+
+        #region Methods
 
         public async Task<bool> IsCompanyNameExistsAsync(string companyName)
         {
@@ -27,5 +35,7 @@ namespace ERP.MVC.Infrastructure.Repositories
         {
             return await _context.Companies.AnyAsync(c => c.MobileNo == mobileNo && c.IsDelete == true);
         }
+
+        #endregion
     }
 }

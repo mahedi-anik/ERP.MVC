@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ERP.MVC.Application.Commands.Branches;
 using ERP.MVC.Application.Commands.Companies;
 using ERP.MVC.Application.DTOs;
 using ERP.MVC.Domain.Entities.Auth;
@@ -19,6 +20,11 @@ namespace ERP.MVC.Application.Mappers
             CreateMap<CreateCompanyCommand, Company>()
                 .ForMember(dest => dest.IsDelete, opt => opt.MapFrom(src => true));
             CreateMap<UpdateCompanyCommand, Company>();
+
+            CreateMap<Branch, BranchDto>();
+            CreateMap<CreateBranchCommand, Company>()
+                .ForMember(dest => dest.IsDelete, opt => opt.MapFrom(src => true));
+            CreateMap<UpdateBranchCommand, Company>();
         }
     }
 

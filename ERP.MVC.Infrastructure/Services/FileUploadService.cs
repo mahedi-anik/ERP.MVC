@@ -1,4 +1,4 @@
-﻿using ERP.MVC.Domain.Enums;
+﻿using ERP.MVC.Domain.Entities.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 

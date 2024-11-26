@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ERP.MVC.Application.Models;
+using ERP.MVC.Domain.Entities.Enums;
 using ERP.MVC.Domain.Entities.MasterData;
-using ERP.MVC.Domain.Enums;
 using ERP.MVC.Domain.Interfaces;
 using ERP.MVC.Infrastructure.Services;
 using FluentValidation;

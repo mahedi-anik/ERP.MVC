@@ -1,5 +1,7 @@
+using ERP.MVC.Application.Commands.Branches;
 using ERP.MVC.Application.Commands.Companies;
 using ERP.MVC.Application.Mappers;
+using ERP.MVC.Application.Queries.Branches;
 using ERP.MVC.Application.Queries.Company;
 using ERP.MVC.Domain.Interfaces;
 using ERP.MVC.Infrastructure.Middleware;
@@ -30,6 +32,8 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
+
+
 // Configure database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -37,9 +41,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetCompaniesQueryHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetBranchesQueryHandler).Assembly));
+
+
+
 
 // Register FluentValidation with ASP.NET Core DI
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCompanyCommandValidator>());
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateBranchCommandValidator>());
+
 
 
 // Add AutoMapper
@@ -53,8 +63,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 //builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-//builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

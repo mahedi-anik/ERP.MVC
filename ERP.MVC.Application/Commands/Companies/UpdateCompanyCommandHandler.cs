@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ERP.MVC.Domain.Enums;
+using ERP.MVC.Domain.Entities.Enums;
 using ERP.MVC.Domain.Interfaces;
 using ERP.MVC.Infrastructure.Services;
 using MediatR;

@@ -10,14 +10,23 @@ namespace ERP.MVC.Web.Controllers
 {
     public class CompanyController : Controller
     {
+        #region Fields
         private readonly IMediator _mediator;
         private readonly ILogger<CompanyController> _logger;
+
+        #endregion
+
+        #region Ctor
 
         public CompanyController(IMediator mediator, ILogger<CompanyController> logger)
         {
             _mediator = mediator;
             _logger = logger;
         }
+
+        #endregion
+
+        #region Methods
 
         // GET: Company/Company-List
         [HttpGet]
@@ -177,8 +186,10 @@ namespace ERP.MVC.Web.Controllers
             return RedirectToAction("CompanyList");
         }
 
+
+
+        #endregion
+
     }
-
-
 
 }

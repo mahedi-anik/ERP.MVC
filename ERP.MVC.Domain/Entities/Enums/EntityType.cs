@@ -1,4 +1,4 @@
-﻿namespace ERP.MVC.Domain.Enums
+﻿namespace ERP.MVC.Domain.Entities.Enums
 {
     public enum EntityType
     {

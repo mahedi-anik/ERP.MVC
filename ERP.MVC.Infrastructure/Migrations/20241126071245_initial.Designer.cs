@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ERP.MVC.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241104062129_initial")]
+    [Migration("20241126071245_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -38,6 +38,10 @@ namespace ERP.MVC.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -49,6 +53,9 @@ namespace ERP.MVC.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<string>("MobileNo")
@@ -64,6 +71,8 @@ namespace ERP.MVC.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Branches");
                 });
@@ -85,6 +94,9 @@ namespace ERP.MVC.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
@@ -115,6 +127,9 @@ namespace ERP.MVC.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
@@ -150,6 +165,9 @@ namespace ERP.MVC.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
@@ -192,6 +210,9 @@ namespace ERP.MVC.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<string>("MobileNo")
@@ -238,6 +259,9 @@ namespace ERP.MVC.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -278,6 +302,9 @@ namespace ERP.MVC.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MobileNo")
                         .HasColumnType("nvarchar(max)");
 
@@ -296,6 +323,17 @@ namespace ERP.MVC.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.Auth.Branch", b =>
+                {
+                    b.HasOne("ERP.MVC.Domain.Entities.MasterData.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("ERP.MVC.Domain.Entities.Auth.Role", b =>

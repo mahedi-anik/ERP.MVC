@@ -17,4 +17,8 @@
     <ProjectReference Include="..\ERP.MVC.Domain\ERP.MVC.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
