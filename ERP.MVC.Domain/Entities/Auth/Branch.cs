@@ -6,9 +6,9 @@ namespace ERP.MVC.Domain.Entities.Auth
 {
     public class Branch : AuditTrailBase
     {
-        [ForeignKey(nameof(CompanyId))]
         public string CompanyId {  get; set; }
-        public virtual Company Company { get; set; }
+        [ForeignKey(nameof(CompanyId))]
+        public virtual Company? Company { get; set; }
         public string? BranchName { get; set; }
         public string? MobileNo { get; set; }
         public string? TelephoneNo { get; set; }
