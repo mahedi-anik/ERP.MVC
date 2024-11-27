@@ -6,10 +6,10 @@ namespace ERP.MVC.Domain.Entities.MasterData
 {
     public class TransactionHead : AuditTrailBase
     {
-        public string CompanyId { get; set; }
+        public string? CompanyId { get; set; }
         [ForeignKey(nameof(CompanyId))]
         public virtual Company? Company { get; set; }
-        public string BranchId { get; set; }
+        public string? BranchId { get; set; }
         [ForeignKey(nameof(BranchId))]
         public virtual Branch? Branch { get; set; }
         public string? AccountHeadTypeId { get; set; }

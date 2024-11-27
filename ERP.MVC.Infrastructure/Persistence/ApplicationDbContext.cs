@@ -21,6 +21,12 @@ namespace ERP.MVC.Infrastructure.Persistence
         // Master Data
         public DbSet<Company> Companies { get; set; }
 
+        // Accounts
+        public DbSet<FinancialYear> FinancialYears { get; set; }
+        public DbSet<AccountHeadType> AccountHeadTypes { get; set; }
+        public DbSet<AccountSubHeadType> AccountSubHeadTypes { get; set; }
+        public DbSet<TransactionHead> TransactionHeads { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

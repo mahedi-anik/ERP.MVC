@@ -76,16 +76,40 @@ namespace ERP.MVC.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AccountHeadTypes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AccountHeadTypeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountHeadTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AccountHeadTypes_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Branches",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CompanyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BranchName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BranchName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobileNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TelephoneNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -102,6 +126,32 @@ namespace ERP.MVC.Infrastructure.Migrations
                         principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FinancialYears",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FinancialYearName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FinancialYears", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FinancialYears_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -125,6 +175,42 @@ namespace ERP.MVC.Infrastructure.Migrations
                         name: "FK_Roles_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AccountSubHeadTypes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    BranchId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AccountHeadTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AccountSubHeadTypeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountSubHeadTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AccountSubHeadTypes_AccountHeadTypes_AccountHeadTypeId",
+                        column: x => x.AccountHeadTypeId,
+                        principalTable: "AccountHeadTypes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AccountSubHeadTypes_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AccountSubHeadTypes_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
                         principalColumn: "Id");
                 });
 
@@ -190,9 +276,76 @@ namespace ERP.MVC.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TransactionHeads",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    BranchId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AccountHeadTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AccountSubHeadTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TransactionHeadName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TransactionHeads", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TransactionHeads_AccountHeadTypes_AccountHeadTypeId",
+                        column: x => x.AccountHeadTypeId,
+                        principalTable: "AccountHeadTypes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TransactionHeads_AccountSubHeadTypes_AccountSubHeadTypeId",
+                        column: x => x.AccountSubHeadTypeId,
+                        principalTable: "AccountSubHeadTypes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TransactionHeads_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TransactionHeads_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountHeadTypes_CompanyId",
+                table: "AccountHeadTypes",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountSubHeadTypes_AccountHeadTypeId",
+                table: "AccountSubHeadTypes",
+                column: "AccountHeadTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountSubHeadTypes_BranchId",
+                table: "AccountSubHeadTypes",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountSubHeadTypes_CompanyId",
+                table: "AccountSubHeadTypes",
+                column: "CompanyId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Branches_CompanyId",
                 table: "Branches",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FinancialYears_CompanyId",
+                table: "FinancialYears",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
@@ -211,6 +364,26 @@ namespace ERP.MVC.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TransactionHeads_AccountHeadTypeId",
+                table: "TransactionHeads",
+                column: "AccountHeadTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionHeads_AccountSubHeadTypeId",
+                table: "TransactionHeads",
+                column: "AccountSubHeadTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionHeads_BranchId",
+                table: "TransactionHeads",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionHeads_CompanyId",
+                table: "TransactionHeads",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserBranches_BranchId",
                 table: "UserBranches",
                 column: "BranchId");
@@ -220,7 +393,13 @@ namespace ERP.MVC.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "FinancialYears");
+
+            migrationBuilder.DropTable(
                 name: "RolePermissions");
+
+            migrationBuilder.DropTable(
+                name: "TransactionHeads");
 
             migrationBuilder.DropTable(
                 name: "UserBranches");
@@ -232,10 +411,16 @@ namespace ERP.MVC.Infrastructure.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Branches");
+                name: "AccountSubHeadTypes");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "AccountHeadTypes");
+
+            migrationBuilder.DropTable(
+                name: "Branches");
 
             migrationBuilder.DropTable(
                 name: "Companies");

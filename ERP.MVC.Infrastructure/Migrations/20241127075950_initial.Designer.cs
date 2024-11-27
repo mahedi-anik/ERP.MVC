@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ERP.MVC.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241127072029_accounts")]
-    partial class accounts
+    [Migration("20241127075950_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -273,6 +273,90 @@ namespace ERP.MVC.Infrastructure.Migrations
                     b.ToTable("UserBranches");
                 });
 
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.AccountHeadType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountHeadTypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("AccountHeadTypes");
+                });
+
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.AccountSubHeadType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountHeadTypeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountSubHeadTypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BranchId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountHeadTypeId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("AccountSubHeadTypes");
+                });
+
             modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.Company", b =>
                 {
                     b.Property<string>("Id")
@@ -321,6 +405,101 @@ namespace ERP.MVC.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.FinancialYear", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FinancialYearName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("FinancialYears");
+                });
+
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.TransactionHead", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountHeadTypeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountSubHeadTypeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BranchId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionHeadName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountHeadTypeId");
+
+                    b.HasIndex("AccountSubHeadTypeId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("TransactionHeads");
                 });
 
             modelBuilder.Entity("ERP.MVC.Domain.Entities.Auth.Branch", b =>
@@ -377,6 +556,72 @@ namespace ERP.MVC.Infrastructure.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.AccountHeadType", b =>
+                {
+                    b.HasOne("ERP.MVC.Domain.Entities.MasterData.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.AccountSubHeadType", b =>
+                {
+                    b.HasOne("ERP.MVC.Domain.Entities.MasterData.AccountHeadType", "AccountHeadType")
+                        .WithMany()
+                        .HasForeignKey("AccountHeadTypeId");
+
+                    b.HasOne("ERP.MVC.Domain.Entities.Auth.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("ERP.MVC.Domain.Entities.MasterData.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("AccountHeadType");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.FinancialYear", b =>
+                {
+                    b.HasOne("ERP.MVC.Domain.Entities.MasterData.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ERP.MVC.Domain.Entities.MasterData.TransactionHead", b =>
+                {
+                    b.HasOne("ERP.MVC.Domain.Entities.MasterData.AccountHeadType", "AccountHeadType")
+                        .WithMany()
+                        .HasForeignKey("AccountHeadTypeId");
+
+                    b.HasOne("ERP.MVC.Domain.Entities.MasterData.AccountSubHeadType", "AccountSubHeadType")
+                        .WithMany()
+                        .HasForeignKey("AccountSubHeadTypeId");
+
+                    b.HasOne("ERP.MVC.Domain.Entities.Auth.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("ERP.MVC.Domain.Entities.MasterData.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("AccountHeadType");
+
+                    b.Navigation("AccountSubHeadType");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("ERP.MVC.Domain.Entities.Auth.Role", b =>
