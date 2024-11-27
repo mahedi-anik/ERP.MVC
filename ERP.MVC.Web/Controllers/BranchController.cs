@@ -1,9 +1,11 @@
 ﻿using ERP.MVC.Application.Commands.Branches;
 using ERP.MVC.Application.DTOs;
 using ERP.MVC.Application.Queries.Branches;
+using ERP.MVC.Application.Queries.Company;
 using ERP.MVC.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace ERP.MVC.Web.Controllers
@@ -33,6 +35,7 @@ namespace ERP.MVC.Web.Controllers
         public async Task<IActionResult> BranchList(string search = "", int page = 1, int pageSize = 10, string sortField = "BranchName", string sortOrder = "asc")
         {
             var branches = await _mediator.Send(new GetBranchesQuery());
+            var companies = await _mediator.Send(new GetCompaniesQuery()); 
 
             // Filter branches based on the search query
             var filteredBranches = string.IsNullOrEmpty(search)
@@ -89,8 +92,10 @@ namespace ERP.MVC.Web.Controllers
 
         // GET: Branch/Branch-View
         [HttpGet]
-        public IActionResult BranchView()
+        public async Task<IActionResult> BranchView()
         {
+            var companies = await _mediator.Send(new GetCompaniesQuery());
+            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName"); 
             return View(new BranchDto());
         }
 
@@ -125,6 +130,8 @@ namespace ERP.MVC.Web.Controllers
                     ModelState.AddModelError(string.Empty, error);
                 }
             }
+            var companies = await _mediator.Send(new GetCompaniesQuery());
+            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
 
             return View(branchDto);
         }
@@ -134,6 +141,8 @@ namespace ERP.MVC.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+            var companies = await _mediator.Send(new GetCompaniesQuery());
+            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
             var branch = await _mediator.Send(new GetBranchByIdQuery { Id = id });
             if (branch == null)
                 return NotFound();

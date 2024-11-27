@@ -21,10 +21,12 @@ namespace ERP.MVC.Application.Mappers
                 .ForMember(dest => dest.IsDelete, opt => opt.MapFrom(src => true));
             CreateMap<UpdateCompanyCommand, Company>();
 
-            CreateMap<Branch, BranchDto>();
-            CreateMap<CreateBranchCommand, Company>()
+            CreateMap<Branch, BranchDto>()
+                .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.Company.Id)) 
+                .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.CompanyName)); 
+            CreateMap<CreateBranchCommand, Branch>()
                 .ForMember(dest => dest.IsDelete, opt => opt.MapFrom(src => true));
-            CreateMap<UpdateBranchCommand, Company>();
+            CreateMap<UpdateBranchCommand, Branch>();
         }
     }
 

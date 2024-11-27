@@ -6,6 +6,7 @@ namespace ERP.MVC.Application.DTOs
     public class BranchDto
     {
         public string? Id { get; set; }
+        [Required(ErrorMessage = "Company is required.")]
         public string? CompanyId { get; set; }
         public string? CompanyName { get; set; }
         [Required(ErrorMessage = "Branch Name is required.")]

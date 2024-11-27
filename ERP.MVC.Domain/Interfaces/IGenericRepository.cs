@@ -11,5 +11,6 @@ namespace ERP.MVC.Domain.Interfaces
         Task DeleteAsync(string id);
         Task IsDeleteAsync(string id);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
     }
 }

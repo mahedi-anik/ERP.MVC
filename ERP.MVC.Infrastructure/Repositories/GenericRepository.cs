@@ -66,5 +66,19 @@ namespace ERP.MVC.Infrastructure.Repositories
                 }
             }
         }
+
+        public async Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            // Filter out deleted entities
+            query = query.Where(x => EF.Property<bool>(x, "IsDelete") == true);
+
+            return await query.ToListAsync();
+        }
     }
 }

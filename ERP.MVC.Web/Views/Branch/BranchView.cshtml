@@ -1,7 +1,7 @@
 ﻿@model ERP.MVC.Application.DTOs.BranchDto
 
 @{
-    ViewData["Title"] = Model.Id == null ? "Create Company" : "Update Company";
+    ViewData["Title"] = Model.Id == null ? "Create Branch" : "Update Branch";
 }
 
 <div class="row">
@@ -44,30 +44,39 @@
                 <form asp-action="@(Model.Id == null ? "BranchView" : "Edit")" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="Id" />
                     <div class="row row-cards">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Company Name</label>
-                                <input asp-for="CompanyName" class="form-control" placeholder="Company Name" />
-                                <span asp-validation-for="CompanyName" class="text-danger"></span>
+                                <select type="text" class="form-select mb-3 is-valid" id="select-countries-valid" asp-for="CompanyId" asp-items="ViewBag.Companies">
+                                    <option value="">Select Company</option>
+                                </select>
+                                <span asp-validation-for="CompanyId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Branch Name</label>
+                                <input asp-for="BranchName" type="text" class="form-control" placeholder="BranchName" />
+                                <span asp-validation-for="BranchName" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
                     <div class="row row-cards">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Mobile No.</label>
                                 <input id="MobileNo" type="text" asp-for="MobileNo" class="form-control" data-mask="(000) 0000-0000" data-mask-visible="true" placeholder="(00) 0000-0000" autocomplete="off" />
                                 <span asp-validation-for="MobileNo" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Telephone No.</label>
                                 <input id="TelephoneNo" type="text" asp-for="TelephoneNo" class="form-control" data-mask="(00) 0000-0000" data-mask-visible="true" placeholder="(00) 0000-0000" autocomplete="off" />
                                 <span asp-validation-for="TelephoneNo" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
                                 <input asp-for="Email" type="email" class="form-control" placeholder="Email" />

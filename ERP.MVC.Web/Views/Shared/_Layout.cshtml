@@ -39,6 +39,9 @@
     <script src="~/dist/libs/jsvectormap/dist/js/jsvectormap.min.js?1692870487" defer></script>
     <script src="~/dist/libs/jsvectormap/dist/maps/world.js?1692870487" defer></script>
     <script src="~/dist/libs/jsvectormap/dist/maps/world-merc.js?1692870487" defer></script>
+    <script src="~/dist/libs/nouislider/dist/nouislider.min.js?1692870487" defer></script>
+    <script src="~/dist/libs/litepicker/dist/litepicker.js?1692870487" defer></script>
+    <script src="~/dist/libs/tom-select/dist/js/tom-select.base.min.js?1692870487" defer></script>
     <!-- Tabler Core -->
     <script src="~/dist/js/tabler.min.js?1692870487" defer></script>
     <script src="~/dist/js/demo.min.js?1692870487" defer></script>
@@ -603,6 +606,30 @@
                     data: [22, 12, 7, 14, 3, 21, 8, 23, 18, 14]
                 }],
             })).render();
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var el;
+            window.TomSelect && (new TomSelect(el = document.getElementById('select-countries-valid'), {
+                copyClassesToDropdown: false,
+                dropdownParent: 'body',
+                controlInput: '<input>',
+                render: {
+                    item: function (data, escape) {
+                        if (data.customProperties) {
+                            return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                        }
+                        return '<div>' + escape(data.text) + '</div>';
+                    },
+                    option: function (data, escape) {
+                        if (data.customProperties) {
+                            return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                        }
+                        return '<div>' + escape(data.text) + '</div>';
+                    },
+                },
+            }));
         });
     </script>
     <style>
