@@ -15,11 +15,11 @@ namespace ERP.MVC.Application.Commands.Companies
 
         public async Task Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
         {
-            var company = await _repository.GetByIdAsync(request.Id);
+            var company = await _repository.GetByIdAsync(cancellationToken, request.Id);
             if (company != null)
             {
                 // Ensure this actually deletes the company from the repository, not just marking it as deleted.
-                await _repository.IsDeleteAsync(company.Id);  // or whatever method performs the actual delete
+                await _repository.IsDeleteAsync(cancellationToken, company.Id);  // or whatever method performs the actual delete
             }
         }
     }

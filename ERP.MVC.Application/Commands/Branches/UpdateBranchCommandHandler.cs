@@ -22,7 +22,7 @@ namespace ERP.MVC.Application.Commands.Branches
         {
             try
             {
-                var branch = await _repository.GetByIdAsync(request.Id);
+                var branch = await _repository.GetByIdAsync(cancellationToken, request.Id);
                 if (branch == null)
                 {
                     throw new Exception($"branch with ID {request.Id} not found.");

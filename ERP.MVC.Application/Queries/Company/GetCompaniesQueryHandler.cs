@@ -17,7 +17,8 @@ namespace ERP.MVC.Application.Queries.Company
         }
         public async Task<List<CompanyDto>> Handle(GetCompaniesQuery request, CancellationToken cancellationToken)
         {
-            var companies = await _repository.GetAllAsync();
+            var companies = await _repository.GetAllAsync(
+              cancellationToken);
             return _mapper.Map<List<CompanyDto>>(companies);
         }
     }

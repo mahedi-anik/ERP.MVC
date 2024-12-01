@@ -5,12 +5,12 @@ namespace ERP.MVC.Domain.Interfaces
     public interface IGenericRepository<T> where T : class
     {
         Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync(string id);
+        Task<T> GetByIdAsync(CancellationToken cancellationToken, string id);
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
-        Task DeleteAsync(string id);
-        Task IsDeleteAsync(string id);
+        Task DeleteAsync(CancellationToken cancellationToken, string id);
+        Task IsDeleteAsync(CancellationToken cancellationToken, string id);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
-        Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
+        Task<List<T>> GetAllAsync(CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes);
     }
 }

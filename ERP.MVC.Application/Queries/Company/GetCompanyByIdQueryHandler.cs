@@ -17,7 +17,7 @@ namespace ERP.MVC.Application.Queries.Company
         }
         public async Task<CompanyDto> Handle(GetCompanyByIdQuery request, CancellationToken cancellationToken)
         {
-            var company = await _repository.GetByIdAsync(request.Id);
+            var company = await _repository.GetByIdAsync(cancellationToken, request.Id);
             return _mapper.Map<CompanyDto>(company);
         }
     }

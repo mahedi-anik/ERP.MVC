@@ -26,7 +26,7 @@ namespace ERP.MVC.Application.Commands.Companies
         {
             try
             {
-                var company = await _repository.GetByIdAsync(request.Id);
+                var company = await _repository.GetByIdAsync(cancellationToken,request.Id);
                 if (company == null)
                 {
                     throw new Exception($"Company with ID {request.Id} not found.");

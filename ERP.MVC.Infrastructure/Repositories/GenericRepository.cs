@@ -21,9 +21,9 @@ namespace ERP.MVC.Infrastructure.Repositories
             return await _dbSet.Where(x => EF.Property<bool>(x, "IsDelete") == true).ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(string id)
+        public async Task<T> GetByIdAsync(CancellationToken cancellationToken, string id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.FindAsync(cancellationToken, id);
         }
 
         public async Task AddAsync(T entity)
@@ -38,9 +38,9 @@ namespace ERP.MVC.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(CancellationToken cancellationToken, string id)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await GetByIdAsync(cancellationToken, id);
             if (entity != null)
             {
                 _dbSet.Remove(entity);
@@ -53,9 +53,9 @@ namespace ERP.MVC.Infrastructure.Repositories
             return await _dbSet.Where(predicate).ToListAsync();
         }
 
-        public async Task IsDeleteAsync(string id)
+        public async Task IsDeleteAsync(CancellationToken cancellationToken, string id)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await GetByIdAsync(cancellationToken,id);
             if (entity != null)
             {
                 var property = _context.Entry(entity).Property("IsDelete");
@@ -67,7 +67,7 @@ namespace ERP.MVC.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
+        public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -78,7 +78,7 @@ namespace ERP.MVC.Infrastructure.Repositories
             // Filter out deleted entities
             query = query.Where(x => EF.Property<bool>(x, "IsDelete") == true);
 
-            return await query.ToListAsync();
+            return await query.ToListAsync(cancellationToken);
         }
     }
 }
