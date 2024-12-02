@@ -22,7 +22,7 @@ namespace ERP.MVC.Application.Commands.AccountHeadTypes
         {
             try
             {
-                var accountHeadType = await _repository.GetByIdAsync(cancellationToken, request.Id);
+                var accountHeadType = await _repository.GetByIdAsync(request.Id, cancellationToken);
                 if (accountHeadType == null)
                 {
                     throw new Exception($"accountHeadType with ID {request.Id} not found.");

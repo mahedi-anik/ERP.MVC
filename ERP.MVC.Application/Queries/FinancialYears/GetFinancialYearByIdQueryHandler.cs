@@ -17,7 +17,7 @@ namespace ERP.MVC.Application.Queries.FinancialYears
         }
         public async Task<FinancialYearDto> Handle(GetFinancialYearByIdQuery request, CancellationToken cancellationToken)
         {
-            var financialYear = await _repository.GetByIdAsync(cancellationToken, request.Id);
+            var financialYear = await _repository.GetByIdAsync(request.Id, cancellationToken);
             return _mapper.Map<FinancialYearDto>(financialYear);
         }
     }

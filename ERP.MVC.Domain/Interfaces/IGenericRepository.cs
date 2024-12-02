@@ -5,7 +5,7 @@ namespace ERP.MVC.Domain.Interfaces
     public interface IGenericRepository<T> where T : class
     {
         Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync(CancellationToken cancellationToken, string id);
+        Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default);
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(CancellationToken cancellationToken, string id);

@@ -1,8 +1,16 @@
+using ERP.MVC.Application.Commands.AccountHeadTypes;
+using ERP.MVC.Application.Commands.AccountSubHeadTypes;
 using ERP.MVC.Application.Commands.Branches;
 using ERP.MVC.Application.Commands.Companies;
+using ERP.MVC.Application.Commands.FinancialYears;
+using ERP.MVC.Application.Commands.TransactionHeads;
 using ERP.MVC.Application.Mappers;
+using ERP.MVC.Application.Queries.AccountHeadTypes;
+using ERP.MVC.Application.Queries.AccountSubHeadTypes;
 using ERP.MVC.Application.Queries.Branches;
 using ERP.MVC.Application.Queries.Company;
+using ERP.MVC.Application.Queries.FinancialYears;
+using ERP.MVC.Application.Queries.TransactionHeads;
 using ERP.MVC.Domain.Interfaces;
 using ERP.MVC.Infrastructure.Middleware;
 using ERP.MVC.Infrastructure.Persistence;
@@ -42,6 +50,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetCompaniesQueryHandler).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetBranchesQueryHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetFinancialYearsQueryHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAccountsHeadTypesQueryHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAccountsSubHeadTypesQueryHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetTransactionHeadsQueryHandler).Assembly));
 
 
 
@@ -49,6 +61,10 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetBr
 // Register FluentValidation with ASP.NET Core DI
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCompanyCommandValidator>());
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateBranchCommandValidator>());
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateFinancialYearCommandValidator>());
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateAccountHeadTypeCommandValidator>());
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateAccountSubHeadTypeCommandValidator>());
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateTransactionHeadCommandValidator>());
 
 
 
@@ -65,6 +81,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<IFinancialYearRepository, FinancialYearRepository>();
+builder.Services.AddScoped<IAccountHeadTypeRepository, AccountHeadTypeRepository>();
+builder.Services.AddScoped<IAccountSubHeadTypeRepository, AccountSubHeadTypeRepository>();
+builder.Services.AddScoped<ITransactionHeadRepository, TransactionHeadRepository>();
 
 
 

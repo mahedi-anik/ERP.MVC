@@ -21,7 +21,7 @@ namespace ERP.MVC.Application.Commands.AccountSubHeadTypes
         {
             try
             {
-                var accountSubHeadType = await _repository.GetByIdAsync(cancellationToken, request.Id);
+                var accountSubHeadType = await _repository.GetByIdAsync(request.Id, cancellationToken);
                 if (accountSubHeadType == null)
                 {
                     throw new Exception($"accountSubHeadType with ID {request.Id} not found.");

@@ -22,7 +22,7 @@ namespace ERP.MVC.Application.Commands.FinancialYears
         {
             try
             {
-                var financialYear = await _repository.GetByIdAsync(cancellationToken, request.Id);
+                var financialYear = await _repository.GetByIdAsync(request.Id, cancellationToken);
                 if (financialYear == null)
                 {
                     throw new Exception($"financialYear with ID {request.Id} not found.");

@@ -17,7 +17,7 @@ namespace ERP.MVC.Application.Queries.TransactionHeads
         }
         public async Task<TransactionHeadDto> Handle(GetTransactionHeadByIdQuery request, CancellationToken cancellationToken)
         {
-            var transactionHead = await _repository.GetByIdAsync(cancellationToken, request.Id);
+            var transactionHead = await _repository.GetByIdAsync(request.Id, cancellationToken);
             return _mapper.Map<TransactionHeadDto>(transactionHead);
         }
     }

@@ -17,7 +17,7 @@ namespace ERP.MVC.Application.Queries.AccountSubHeadTypes
         }
         public async Task<AccountsSubHeadTypeDto> Handle(GetAccountSubHeadTypeByIdQuery request, CancellationToken cancellationToken)
         {
-            var accountSubHeadType = await _repository.GetByIdAsync(cancellationToken, request.Id);
+            var accountSubHeadType = await _repository.GetByIdAsync(request.Id, cancellationToken);
             return _mapper.Map<AccountsSubHeadTypeDto>(accountSubHeadType);
         }
     }

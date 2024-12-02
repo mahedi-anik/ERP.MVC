@@ -21,9 +21,9 @@ namespace ERP.MVC.Infrastructure.Repositories
             return await _dbSet.Where(x => EF.Property<bool>(x, "IsDelete") == true).ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(CancellationToken cancellationToken, string id)
+        public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FindAsync(cancellationToken, id);
+            return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
         public async Task AddAsync(T entity)
@@ -40,7 +40,7 @@ namespace ERP.MVC.Infrastructure.Repositories
 
         public async Task DeleteAsync(CancellationToken cancellationToken, string id)
         {
-            var entity = await GetByIdAsync(cancellationToken, id);
+            var entity = await GetByIdAsync(id, cancellationToken);
             if (entity != null)
             {
                 _dbSet.Remove(entity);
@@ -55,7 +55,7 @@ namespace ERP.MVC.Infrastructure.Repositories
 
         public async Task IsDeleteAsync(CancellationToken cancellationToken, string id)
         {
-            var entity = await GetByIdAsync(cancellationToken,id);
+            var entity = await GetByIdAsync(id, cancellationToken);
             if (entity != null)
             {
                 var property = _context.Entry(entity).Property("IsDelete");

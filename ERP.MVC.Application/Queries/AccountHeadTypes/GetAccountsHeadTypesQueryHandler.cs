@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ERP.MVC.Application.DTOs;
+using ERP.MVC.Domain.Entities.MasterData;
 using ERP.MVC.Domain.Interfaces;
 using MediatR;
 
@@ -19,8 +20,9 @@ namespace ERP.MVC.Application.Queries.AccountHeadTypes
         {
             var accountHeadTypes = await _repository.GetAllAsync(
                cancellationToken,
-               x => x.Company != null
+            x => x.Company 
            );
+            var filteredAccountHeadTypes = accountHeadTypes.Where(b => b.Company != null);
             return _mapper.Map<List<AccountsHeadTypeDto>>(accountHeadTypes);
         }
     }

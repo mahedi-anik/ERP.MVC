@@ -17,11 +17,11 @@ namespace ERP.MVC.Application.Queries.Branches
         }
         public async Task<List<BranchDto>> Handle(GetBranchesQuery request, CancellationToken cancellationToken)
         {
-            var branches = await _repository.GetAllAsync(
-               cancellationToken,
-               x => x.Company != null
-           );
-            return _mapper.Map<List<BranchDto>>(branches);
+            var branches = await _repository.GetAllAsync(cancellationToken, x => x.Company);
+
+            var filteredBranches = branches.Where(b => b.Company != null);
+
+            return _mapper.Map<List<BranchDto>>(filteredBranches);
         }
     }
 }

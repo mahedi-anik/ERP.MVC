@@ -21,7 +21,7 @@ namespace ERP.MVC.Application.Commands.TransactionHeads
         {
             try
             {
-                var transactionHead = await _repository.GetByIdAsync(cancellationToken, request.Id);
+                var transactionHead = await _repository.GetByIdAsync(request.Id, cancellationToken);
                 if (transactionHead == null)
                 {
                     throw new Exception($"transactionHead with ID {request.Id} not found.");

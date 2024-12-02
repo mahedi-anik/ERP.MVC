@@ -58,11 +58,17 @@
                     <div class="dropdown-menu">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="./alerts.html">
-                                    Company
+                                <a class="dropdown-item" asp-controller="FinancialYear" asp-action="FinancialYearList">
+                                    Financial Year
                                 </a>
-                                <a class="dropdown-item" href="./accordion.html">
-                                    Branch
+                                <a class="dropdown-item" asp-controller="AccountHeadType" asp-action="AccountHeadTypeList">
+                                    Accounts Head Type
+                                </a>
+                                <a class="dropdown-item" asp-controller="AccountSubHeadType" asp-action="AccountSubHeadTypeList">
+                                    Accounts Sub Head Type
+                                </a>
+                                <a class="dropdown-item" asp-controller="TransactionHead" asp-action="TransactionHeadList">
+                                    Transaction Head Type
                                 </a>
                             </div>
                         </div>
