@@ -1,4 +1,4 @@
-﻿using ERP.MVC.Application.Commands.AccountHeadTypes;
+﻿using ERP.MVC.Application.Commands.AccountSubHeadTypes;
 using ERP.MVC.Application.DTOs;
 using ERP.MVC.Application.Queries.AccountHeadTypes;
 using ERP.MVC.Application.Queries.AccountSubHeadTypes;
@@ -34,7 +34,7 @@ namespace ERP.MVC.Web.Controllers
 
         // GET: AccountSubHeadType/AccountSubHeadType-List
         [HttpGet]
-        public async Task<IActionResult> AccountSubHeadTypeList(string search = "", int page = 1, int pageSize = 10, string sortField = "AccountHeadTypeName", string sortOrder = "asc")
+        public async Task<IActionResult> AccountSubHeadTypeList(string search = "", int page = 1, int pageSize = 10, string sortField = "AccountSubHeadTypeName", string sortOrder = "asc")
         {
             var accountsSubHeadTypes = await _mediator.Send(new GetAccountsSubHeadTypesQuery());
             var companies = await _mediator.Send(new GetCompaniesQuery());
@@ -42,32 +42,42 @@ namespace ERP.MVC.Web.Controllers
             var accountsHeadTypes = await _mediator.Send(new GetAccountsHeadTypesQuery());
 
             // Filter AccountHeadTypes based on the search query
-            var filteredAccountHeadTypes = string.IsNullOrEmpty(search)
-                ? accountsHeadTypes
-                : accountsHeadTypes.Where(c => !string.IsNullOrEmpty(c.AccountHeadTypeName) && c.AccountHeadTypeName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+            var filteredAccountSubHeadTypes = string.IsNullOrEmpty(search)
+                ? accountsSubHeadTypes
+                : accountsSubHeadTypes.Where(c => !string.IsNullOrEmpty(c.AccountSubHeadTypeName) && c.AccountSubHeadTypeName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
 
             // Apply sorting
             switch (sortField)
             {
                 case "CompanyName":
-                    filteredAccountHeadTypes = sortOrder == "asc"
-                        ? filteredAccountHeadTypes.OrderBy(c => c.CompanyName).ToList()
-                        : filteredAccountHeadTypes.OrderByDescending(c => c.CompanyName).ToList();
+                    filteredAccountSubHeadTypes = sortOrder == "asc"
+                        ? filteredAccountSubHeadTypes.OrderBy(c => c.CompanyName).ToList()
+                        : filteredAccountSubHeadTypes.OrderByDescending(c => c.CompanyName).ToList();
+                    break;
+                case "BranchName":
+                    filteredAccountSubHeadTypes = sortOrder == "asc"
+                        ? filteredAccountSubHeadTypes.OrderBy(c => c.BranchName).ToList()
+                        : filteredAccountSubHeadTypes.OrderByDescending(c => c.BranchName).ToList();
                     break;
                 case "AccountHeadTypeName":
-                    filteredAccountHeadTypes = sortOrder == "asc"
-                        ? filteredAccountHeadTypes.OrderBy(c => c.AccountHeadTypeName).ToList()
-                        : filteredAccountHeadTypes.OrderByDescending(c => c.AccountHeadTypeName).ToList();
+                    filteredAccountSubHeadTypes = sortOrder == "asc"
+                        ? filteredAccountSubHeadTypes.OrderBy(c => c.AccountHeadTypeName).ToList()
+                        : filteredAccountSubHeadTypes.OrderByDescending(c => c.AccountHeadTypeName).ToList();
+                    break;
+                case "AccountSubHeadTypeName":
+                    filteredAccountSubHeadTypes = sortOrder == "asc"
+                        ? filteredAccountSubHeadTypes.OrderBy(c => c.AccountSubHeadTypeName).ToList()
+                        : filteredAccountSubHeadTypes.OrderByDescending(c => c.AccountSubHeadTypeName).ToList();
                     break;
                 case "IsActive":
-                    filteredAccountHeadTypes = sortOrder == "asc"
-                        ? filteredAccountHeadTypes.OrderBy(c => c.IsActive).ToList()
-                        : filteredAccountHeadTypes.OrderByDescending(c => c.IsActive).ToList();
+                    filteredAccountSubHeadTypes = sortOrder == "asc"
+                        ? filteredAccountSubHeadTypes.OrderBy(c => c.IsActive).ToList()
+                        : filteredAccountSubHeadTypes.OrderByDescending(c => c.IsActive).ToList();
                     break;
             }
 
-            var totalEntries = filteredAccountHeadTypes.Count();
-            var pagedAccountHeadTypes = filteredAccountHeadTypes.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var totalEntries = filteredAccountSubHeadTypes.Count();
+            var pagedAccountSubHeadTypes = filteredAccountSubHeadTypes.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             ViewBag.CurrentPage = page;
             ViewBag.TotalEntries = totalEntries;
@@ -76,29 +86,37 @@ namespace ERP.MVC.Web.Controllers
             ViewBag.SortField = sortField;
             ViewBag.SortOrder = sortOrder;
 
-            return View(pagedAccountHeadTypes);
+            return View(pagedAccountSubHeadTypes);
         }
 
-        // GET: AccountSubHeadType/AccountSubHeadType-View
+        // GET: AccountSubHeadType/AccountSubHeadTypeView
         [HttpGet]
         public async Task<IActionResult> AccountSubHeadTypeView()
         {
+            // Fetch companies for the company dropdown
             var companies = await _mediator.Send(new GetCompaniesQuery());
             ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
-            return View(new AccountsHeadTypeDto());
+
+            // Initially set empty lists for Branches and Account Head Types
+            ViewBag.Branches = new SelectList(new List<BranchDto>(), "Id", "BranchName");
+            ViewBag.AccountHeadTypes = new SelectList(new List<AccountsHeadTypeDto>(), "Id", "AccountHeadTypeName");
+
+            return View(new AccountsSubHeadTypeDto());
         }
 
         //POST: AccountSubHeadType/AccountSubHeadType-View     
         [HttpPost]
-        public async Task<IActionResult> AccountHeadTypeView([FromForm] AccountsHeadTypeDto accountsHeadTypeDto)
+        public async Task<IActionResult> AccountSubHeadTypeView([FromForm] AccountsSubHeadTypeDto accountsSubHeadTypeDto)
         {
             if (ModelState.IsValid)
             {
-                var command = new CreateAccountHeadTypeCommand
+                var command = new CreateAccountSubHeadTypeCommand
                 {
-                    CompanyId = accountsHeadTypeDto.CompanyId,
-                    AccountHeadTypeName = accountsHeadTypeDto.AccountHeadTypeName,
-                    IsActive = accountsHeadTypeDto.IsActive,
+                    CompanyId = accountsSubHeadTypeDto.CompanyId,
+                    BranchId = accountsSubHeadTypeDto.BranchId,
+                    AccountHeadTypeId = accountsSubHeadTypeDto.AccountHeadTypeId,
+                    AccountSubHeadTypeName = accountsSubHeadTypeDto.AccountSubHeadTypeName,
+                    IsActive = accountsSubHeadTypeDto.IsActive,
                     IsDelete = true
                 };
 
@@ -108,17 +126,18 @@ namespace ERP.MVC.Web.Controllers
                 {
                     var alertMessage = new AlertMessage { Message = "New Information has been saved!", AlertType = "success" };
                     TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage);
-                    return RedirectToAction("AccountHeadTypeList");
+                    return RedirectToAction("AccountSubHeadTypeList");
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error);
                 }
             }
+            // Re-fetch companies in case of failure
             var companies = await _mediator.Send(new GetCompaniesQuery());
             ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
 
-            return View(accountsHeadTypeDto);
+            return View(accountsSubHeadTypeDto);
         }
 
 
@@ -126,39 +145,86 @@ namespace ERP.MVC.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var companies = await _mediator.Send(new GetCompaniesQuery());
-            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
-            var accountsHeadType = await _mediator.Send(new GetAccountHeadTypeByIdQuery { Id = id });
-            if (accountsHeadType == null)
+            //var companies = await _mediator.Send(new GetCompaniesQuery());
+            //ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
+            //var branches = await _mediator.Send(new GetBranchesQuery());
+            //ViewBag.branches = new SelectList(companies, "Id", "BranchName");
+            //var accountsHeadTypes = await _mediator.Send(new GetAccountsHeadTypesQuery());
+            //ViewBag.accountsHeadTypes = new SelectList(companies, "Id", "AccountHeadTypeName");
+            //var accountsSubHeadType = await _mediator.Send(new GetAccountSubHeadTypeByIdQuery { Id = id });
+            //if (accountsSubHeadType == null)
+            //    return NotFound();
+            //return View("AccountSubHeadTypeView", accountsSubHeadType);
+            // Fetch the record to be edited
+            var accountsSubHeadType = await _mediator.Send(new GetAccountSubHeadTypeByIdQuery { Id = id });
+            if (accountsSubHeadType == null)
                 return NotFound();
-            return View("AccountHeadTypeView", accountsHeadType);
+
+            // Populate dropdowns
+            var companies = await _mediator.Send(new GetCompaniesQuery());
+            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName", accountsSubHeadType.CompanyId);
+
+            var branches = await _mediator.Send(new GetBranchByCompanyIdQuery { CompanyId = accountsSubHeadType.CompanyId });
+            ViewBag.Branches = new SelectList(branches, "Id", "BranchName", accountsSubHeadType.BranchId);
+
+            var accountsHeadTypes = await _mediator.Send(new GetAccountHeadTypeByCompanyIdQuery { CompanyId = accountsSubHeadType.CompanyId });
+            ViewBag.AccountHeadTypes = new SelectList(accountsHeadTypes, "Id", "AccountHeadTypeName", accountsSubHeadType.AccountHeadTypeId);
+
+            // Pass the model to the view
+            return View("AccountSubHeadTypeView", accountsSubHeadType);
         }
 
         // POST: AccountSubHeadType/Edit/{id}
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, [FromForm] AccountsHeadTypeDto accountsHeadTypeDto)
+        public async Task<IActionResult> Edit(string id, [FromForm] AccountsSubHeadTypeDto accountsSubHeadTypeDto)
         {
             if (!ModelState.IsValid)
             {
-                return View(accountsHeadTypeDto);
+                return View(accountsSubHeadTypeDto);
             }
 
-            var command = new UpdateAccountHeadTypeCommand
+            var command = new UpdateAccountSubHeadTypeCommand
             {
                 Id = id,
-                CompanyId = accountsHeadTypeDto.CompanyId,
-                AccountHeadTypeName = accountsHeadTypeDto.AccountHeadTypeName,
-                IsActive = accountsHeadTypeDto.IsActive,
+                CompanyId = accountsSubHeadTypeDto.CompanyId,
+                BranchId = accountsSubHeadTypeDto.BranchId,
+                AccountHeadTypeId = accountsSubHeadTypeDto.AccountHeadTypeId,
+                AccountSubHeadTypeName = accountsSubHeadTypeDto.AccountSubHeadTypeName,
+                IsActive = accountsSubHeadTypeDto.IsActive,
                 IsDelete = true
             };
 
             await _mediator.Send(command);
             var alertMessage = new AlertMessage { Message = "Update has been saved!", AlertType = "success" };
             TempData["AlertMessage"] = JsonConvert.SerializeObject(alertMessage);
-            return RedirectToAction("AccountHeadTypeList");
+            return RedirectToAction("AccountSubHeadTypeList");
         }
 
+        // GET: AccountSubHeadType/GetBranchesByCompanyId/{companyId}
+        [HttpGet]
+        public async Task<IActionResult> GetBranchesByCompanyId(string companyId)
+        {
+            if (string.IsNullOrEmpty(companyId))
+            {
+                return Json(new { success = false, message = "Company ID is required" });
+            }
 
+            var branches = await _mediator.Send(new GetBranchByCompanyIdQuery { CompanyId = companyId });
+            return Json(new { success = true, branches });
+        }
+
+        // GET: AccountSubHeadType/GetAccountHeadTypesByCompanyId/{companyId}
+        [HttpGet]
+        public async Task<IActionResult> GetAccountHeadTypesByCompanyId(string companyId)
+        {
+            if (string.IsNullOrEmpty(companyId))
+            {
+                return Json(new { success = false, message = "Company ID is required" });
+            }
+
+            var accountHeadTypes = await _mediator.Send(new GetAccountHeadTypeByCompanyIdQuery { CompanyId = companyId });
+            return Json(new { success = true, accountHeadTypes });
+        }
 
 
         #endregion

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ERP.MVC.Application.Queries.AccountHeadTypes
 {
-    public class GetAccountHeadTypeByCompanyIdQuery : IRequest<AccountsHeadTypeDto>
+    public class GetAccountHeadTypeByCompanyIdQuery : IRequest<List<AccountsHeadTypeDto>>
     {
         public string CompanyId { get; set; }
     }

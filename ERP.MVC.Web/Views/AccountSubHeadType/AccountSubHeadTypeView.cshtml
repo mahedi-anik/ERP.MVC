@@ -1,0 +1,161 @@
+﻿@model ERP.MVC.Application.DTOs.AccountsSubHeadTypeDto
+
+@{
+    ViewData["Title"] = Model.Id == null ? "Create Accounts SUb Head Type" : "Update Accounts Sub Head Type";
+}
+
+<div class="row">
+    <ol class="breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+        <li class="breadcrumb-item">
+            <a href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+            </a>
+        </li>
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Accounts</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="#">Accounts Sub Head Type View</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+            <a href="#">@((Model.Id == null) ? "Create Accounts Sub Head Type" : "Update Accounts Sub Head Type")</a>
+        </li>
+    </ol>
+</div>
+<div class="row">&nbsp;</div>
+<!-- Display Validation Summary -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+        <!-- Close button -->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<div class="row row-cards">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">@ViewData["Title"]</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="@(Model.Id == null ? "AccountSubHeadTypeView" : "Edit")" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row row-cards">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Company Name</label>
+                                <select asp-for="CompanyId" asp-items="ViewBag.Companies" class="form-select mb-3 is-valid" id="CompanyId">
+                                    <option value="">Select Company</option>
+                                </select>
+                                <span asp-validation-for="CompanyId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Branch Name</label>
+                                <select asp-for="BranchId" class="form-select mb-3 is-valid" id="BranchId">
+                                    <option value="">Select Branch</option>
+                                </select>
+                                <span asp-validation-for="BranchId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-cards">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Accounts Head Type Name</label>
+                                <select asp-for="AccountHeadTypeId" class="form-select mb-3 is-valid" id="AccountHeadTypeId">
+                                    <option value="">Select Account Head Type</option>
+                                </select>
+                                <span asp-validation-for="AccountHeadTypeId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Accounts Sub Head Type Name</label>
+                                <input asp-for="AccountSubHeadTypeName" type="text" class="form-control" placeholder="Accounts Sub Head Type Name" />
+                                <span asp-validation-for="AccountSubHeadTypeName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-cards">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <div class="form-label"></div>
+                                <label class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                                    <span class="form-check-label">Active</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-cards">
+                        <div class="col-md-12" style="text-align:right">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a asp-action="AccountSubHeadTypeList" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    // Function to handle Company change event
+    function handleCompanyChange() {
+        var companyId = $('#CompanyId').val();
+
+        // Clear Branch and AccountHeadType dropdowns before loading new data
+        $('#BranchId').html('<option>Loading...</option>');
+        $('#AccountHeadTypeId').html('<option>Loading...</option>');
+
+        // Fetch Branches based on selected Company
+        $.get('/AccountSubHeadType/GetBranchesByCompanyId', { companyId: companyId }, function (response) {
+            if (response.success) {
+                // Sort the branches in ascending order by branch name
+                response.branches.sort(function (a, b) {
+                    return a.branchName.localeCompare(b.branchName);
+                });
+
+                var branchOptions = '<option value="">Select Branch</option>';
+                $.each(response.branches, function (i, branch) {
+                    branchOptions += '<option value="' + branch.id + '">' + branch.branchName + '</option>';
+                });
+                $('#BranchId').html(branchOptions);
+            } else {
+                $('#BranchId').html('<option>No branches found</option>');
+            }
+        });
+
+        // Fetch Account Head Types based on selected Company
+        $.get('/AccountSubHeadType/GetAccountHeadTypesByCompanyId', { companyId: companyId }, function (response) {
+            if (response.success) {
+                // Sort the account head types in ascending order by name
+                response.accountHeadTypes.sort(function (a, b) {
+                    return a.accountHeadTypeName.localeCompare(b.accountHeadTypeName);
+                });
+
+                var accountHeadTypeOptions = '<option value="">Select Account Head Type</option>';
+                $.each(response.accountHeadTypes, function (i, accountHeadType) {
+                    accountHeadTypeOptions += '<option value="' + accountHeadType.id + '">' + accountHeadType.accountHeadTypeName + '</option>';
+                });
+                $('#AccountHeadTypeId').html(accountHeadTypeOptions);
+            } else {
+                $('#AccountHeadTypeId').html('<option>No account head types found</option>');
+            }
+        });
+    }
+
+    // Attach the handleCompanyChange function to the CompanyId change event
+    $(document).ready(function () {
+        $('#CompanyId').change(handleCompanyChange);
+    });
+</script>

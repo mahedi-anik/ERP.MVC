@@ -6,6 +6,7 @@ namespace ERP.MVC.Domain.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(CancellationToken cancellationToken, string id);

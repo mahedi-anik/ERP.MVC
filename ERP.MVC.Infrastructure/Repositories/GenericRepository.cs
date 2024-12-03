@@ -80,5 +80,12 @@ namespace ERP.MVC.Infrastructure.Repositories
 
             return await query.ToListAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.Where(predicate).ToListAsync(cancellationToken);
+        }
+
+
     }
 }

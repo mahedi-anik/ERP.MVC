@@ -5,7 +5,7 @@ using MediatR;
 
 namespace ERP.MVC.Application.Queries.AccountHeadTypes
 {
-    public class GetAccountHeadTypeByCompanyIdQueryHandler : IRequestHandler<GetAccountHeadTypeByCompanyIdQuery, AccountsHeadTypeDto>
+    public class GetAccountHeadTypeByCompanyIdQueryHandler : IRequestHandler<GetAccountHeadTypeByCompanyIdQuery, List<AccountsHeadTypeDto>>
     {
         private readonly IAccountHeadTypeRepository _repository;
         private readonly IMapper _mapper;
@@ -15,9 +15,14 @@ namespace ERP.MVC.Application.Queries.AccountHeadTypes
             _repository = repository;
             _mapper = mapper;
         }
-        public Task<AccountsHeadTypeDto> Handle(GetAccountHeadTypeByCompanyIdQuery request, CancellationToken cancellationToken)
+
+        public async Task<List<AccountsHeadTypeDto>> Handle(GetAccountHeadTypeByCompanyIdQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var accountHeadTypes = await _repository.FindByConditionAsync(x => x.CompanyId == request.CompanyId, cancellationToken);
+
+            return _mapper.Map<List<AccountsHeadTypeDto>>(accountHeadTypes);
         }
+
+
     }
 }
