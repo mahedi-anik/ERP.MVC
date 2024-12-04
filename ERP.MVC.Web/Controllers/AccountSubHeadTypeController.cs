@@ -145,36 +145,22 @@ namespace ERP.MVC.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            //var companies = await _mediator.Send(new GetCompaniesQuery());
-            //ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
-            //var branches = await _mediator.Send(new GetBranchesQuery());
-            //ViewBag.branches = new SelectList(companies, "Id", "BranchName");
-            //var accountsHeadTypes = await _mediator.Send(new GetAccountsHeadTypesQuery());
-            //ViewBag.accountsHeadTypes = new SelectList(companies, "Id", "AccountHeadTypeName");
-            //var accountsSubHeadType = await _mediator.Send(new GetAccountSubHeadTypeByIdQuery { Id = id });
-            //if (accountsSubHeadType == null)
-            //    return NotFound();
-            //return View("AccountSubHeadTypeView", accountsSubHeadType);
-            // Fetch the record to be edited
             var accountsSubHeadType = await _mediator.Send(new GetAccountSubHeadTypeByIdQuery { Id = id });
             if (accountsSubHeadType == null)
                 return NotFound();
 
-            // Populate dropdowns
             var companies = await _mediator.Send(new GetCompaniesQuery());
-            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName", accountsSubHeadType.CompanyId);
+            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
 
             var branches = await _mediator.Send(new GetBranchByCompanyIdQuery { CompanyId = accountsSubHeadType.CompanyId });
-            ViewBag.Branches = new SelectList(branches, "Id", "BranchName", accountsSubHeadType.BranchId);
+            ViewBag.Branches = branches;
 
-            var accountsHeadTypes = await _mediator.Send(new GetAccountHeadTypeByCompanyIdQuery { CompanyId = accountsSubHeadType.CompanyId });
-            ViewBag.AccountHeadTypes = new SelectList(accountsHeadTypes, "Id", "AccountHeadTypeName", accountsSubHeadType.AccountHeadTypeId);
+            var accountsHeadTypes = await _mediator.Send(new GetAccountHeadTypeByCompanyIdQuery { CompanyId=accountsSubHeadType.CompanyId});
+            ViewBag.AccountHeadTypes = accountsHeadTypes;
 
-            // Pass the model to the view
             return View("AccountSubHeadTypeView", accountsSubHeadType);
         }
 
-        // POST: AccountSubHeadType/Edit/{id}
         [HttpPost]
         public async Task<IActionResult> Edit(string id, [FromForm] AccountsSubHeadTypeDto accountsSubHeadTypeDto)
         {

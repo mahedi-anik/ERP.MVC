@@ -21,6 +21,20 @@ namespace ERP.MVC.Infrastructure.Repositories
             return await _dbSet.Where(x => EF.Property<bool>(x, "IsDelete") == true).ToListAsync();
         }
 
+        public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = _dbSet;
+
+            // Apply includes if any are passed
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query
+                .FirstOrDefaultAsync(entity => EF.Property<string>(entity, "Id") == id, cancellationToken);
+        }
+
         public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
