@@ -150,13 +150,13 @@ namespace ERP.MVC.Web.Controllers
                 return NotFound();
 
             var companies = await _mediator.Send(new GetCompaniesQuery());
-            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName");
+            ViewBag.Companies = new SelectList(companies, "Id", "CompanyName", accountsSubHeadType.CompanyId); // Set selected value
 
             var branches = await _mediator.Send(new GetBranchByCompanyIdQuery { CompanyId = accountsSubHeadType.CompanyId });
-            ViewBag.Branches = branches;
+            ViewBag.Branches = new SelectList(branches, "Id", "BranchName", accountsSubHeadType.BranchId); // Set selected value
 
-            var accountsHeadTypes = await _mediator.Send(new GetAccountHeadTypeByCompanyIdQuery { CompanyId=accountsSubHeadType.CompanyId});
-            ViewBag.AccountHeadTypes = accountsHeadTypes;
+            var accountsHeadTypes = await _mediator.Send(new GetAccountHeadTypeByCompanyIdQuery { CompanyId = accountsSubHeadType.CompanyId });
+            ViewBag.AccountHeadTypes = new SelectList(accountsHeadTypes, "Id", "AccountHeadTypeName", accountsSubHeadType.AccountHeadTypeId); // Set selected value
 
             return View("AccountSubHeadTypeView", accountsSubHeadType);
         }
