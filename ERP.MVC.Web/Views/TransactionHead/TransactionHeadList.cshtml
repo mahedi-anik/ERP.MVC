@@ -1,0 +1,135 @@
+﻿@using Newtonsoft.Json;
+@model List<ERP.MVC.Application.DTOs.TransactionHeadDto>
+
+@{
+    ViewData["Title"] = "Accounts Head Types List";
+}
+
+<div class="row">
+    <ol class="breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Accounts</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="#">Transaction Head List</a></li>
+    </ol>
+</div>
+<!-- Alert Section -->
+@{
+    var alertMessageJson = TempData["AlertMessage"] as string;
+    AlertMessage alertMessage = null;
+
+    if (!string.IsNullOrEmpty(alertMessageJson))
+    {
+        alertMessage = JsonConvert.DeserializeObject<AlertMessage>(alertMessageJson);
+    }
+}
+@if (alertMessage != null)
+{
+    @await Html.PartialAsync("_Alert", alertMessage)
+}
+
+<div class="row">&nbsp;</div>
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Transaction Heads List</h3>
+            &nbsp;<a asp-controller="TransactionHead" asp-action="TransactionHeadView" class="btn-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M9 12h6" /><path d="M12 9v6" /></svg>
+            </a>
+        </div>
+        <div class="card-body border-bottom py-3">
+            <form method="get" asp-action="TransactionHeadList">
+                <div class="d-flex">
+                    @* <div class="text-secondary">
+                    Show
+                    <div class="mx-2 d-inline-block">
+                    <input type="text" name="pageSize" class="form-control form-control-sm" value="@ViewBag.PageSize" size="3" aria-label="Companies count">
+                    </div>
+                    entries
+                    </div> *@
+                    <div class="ms-auto text-secondary">
+                        Search:
+                        <div class="ms-2 d-inline-block">
+                            <input type="text" name="search" class="form-control form-control-sm" value="@ViewBag.SearchQuery" placeholder="transaction head...">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm ms-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table card-table table-vcenter text-nowrap datatable">
+                <thead>
+                    <tr>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sort('CompanyName')">Company</a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sort('BranchName')">Branch</a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sort('AccountHeadTypeName')">Account Head Type </a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sort('AccountSubHeadTypeName')">Account Sub Head Type </a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sort('TransactionHeadName')">Transaction Head </a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sort('Isactive')">Isactive</a>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transactionHead in Model)
+                    {
+                        <tr>
+                            <td>@transactionHead.CompanyName</td>
+                            <td>@transactionHead.BranchName</td>
+                            <td>@transactionHead.AccountHeadTypeName</td>
+                            <td>@transactionHead.AccountSubHeadTypeName</td>
+                            <td>@transactionHead.TransactionHeadName</td>
+                            <td>@(transactionHead.IsActive ? "Active" : "Inactive")</td>
+                            <td>
+                                <a asp-controller="TransactionHead" asp-action="Edit" asp-route-id="@transactionHead.Id" class="btn-warning">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                                </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer d-flex align-items-center">
+            <p class="m-0 text-secondary">Showing <span>@(ViewBag.CurrentPage * ViewBag.PageSize - (ViewBag.PageSize - 1))</span> to <span>@(ViewBag.CurrentPage * ViewBag.PageSize > ViewBag.TotalEntries ? ViewBag.TotalEntries : ViewBag.CurrentPage * ViewBag.PageSize)</span> of <span>@ViewBag.TotalEntries</span> entries</p>
+            <ul class="pagination m-0 ms-auto">
+                @for (int i = 1; i <= (int)Math.Ceiling((double)ViewBag.TotalEntries / ViewBag.PageSize); i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="TransactionHeadList" asp-route-page="@i" asp-route-search="@ViewBag.SearchQuery" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    function sort(field) {
+        var currentSortField = '@ViewBag.SortField';
+        var currentSortOrder = '@ViewBag.SortOrder';
+        var newSortOrder = currentSortField === field && currentSortOrder === 'asc' ? 'desc' : 'asc';
+
+        window.location.href = '@Url.Action("TransactionHeadList", "TransactionHead")' +
+            '?search=' + '@ViewBag.SearchQuery' +
+            '&page=' + '@ViewBag.CurrentPage' +
+            '&pageSize=' + '@ViewBag.PageSize' +
+            '&sortField=' + field +
+            '&sortOrder=' + newSortOrder;
+    }
+
+</script>

@@ -1,7 +1,7 @@
-﻿@model ERP.MVC.Application.DTOs.AccountsSubHeadTypeDto
+﻿@model ERP.MVC.Application.DTOs.TransactionHeadDto
 
 @{
-    ViewData["Title"] = Model.Id == null ? "Create Accounts Sub Head Type" : "Update Accounts Sub Head Type";
+    ViewData["Title"] = Model.Id == null ? "Create Transaction  Head" : "Update Transaction Head";
 }
 
 <div class="row">
@@ -13,9 +13,9 @@
         </li>
         <li class="breadcrumb-item"><a href="#">Home</a></li>
         <li class="breadcrumb-item"><a href="#">Accounts</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><a href="#">Accounts Sub Head Type View</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="#">Transaction Head View</a></li>
         <li class="breadcrumb-item active" aria-current="page">
-            <a href="#">@((Model.Id == null) ? "Create Accounts Sub Head Type" : "Update Accounts Sub Head Type")</a>
+            <a href="#">@((Model.Id == null) ? "Create Transaction Head" : "Update ATransaction Head")</a>
         </li>
     </ol>
 </div>
@@ -41,7 +41,7 @@
                 <h4 class="card-title">@ViewData["Title"]</h4>
             </div>
             <div class="card-body">
-                <form asp-action="@(Model.Id == null ? "AccountSubHeadTypeView" : "Edit")" method="post" enctype="multipart/form-data">
+                <form asp-action="@(Model.Id == null ? "TransactionHeadView" : "Edit")" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="Id" />
                     <div class="row row-cards">
                         <div class="col-md-6">
@@ -75,9 +75,20 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Accounts Sub Head Type Name</label>
-                                <input asp-for="AccountSubHeadTypeName" type="text" class="form-control" placeholder="Accounts Sub Head Type Name" />
-                                <span asp-validation-for="AccountSubHeadTypeName" class="text-danger"></span>
+                                <label class="form-label">Accounts SUb Head Type Name</label>
+                                <select asp-for="AccountSubHeadTypeId" class="form-select mb-3 is-valid" id="AccountSubHeadTypeId">
+                                    <option value="">Select Account Sub Head Type</option>
+                                </select>
+                                <span asp-validation-for="AccountSubHeadTypeId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-cards">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Transaction Head Name</label>
+                                <input asp-for="TransactionHeadName" type="text" class="form-control" placeholder="Transaction Head Name" />
+                                <span asp-validation-for="TransactionHeadName" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -95,7 +106,7 @@
                     <div class="row row-cards">
                         <div class="col-md-12" style="text-align:right">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <a asp-action="AccountSubHeadTypeList" class="btn btn-secondary">Cancel</a>
+                            <a asp-action="TransactionHeadList" class="btn btn-secondary">Cancel</a>
                         </div>
                     </div>
                 </form>

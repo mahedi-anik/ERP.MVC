@@ -17,13 +17,19 @@ namespace ERP.MVC.Application.Queries.TransactionHeads
         }
         public async Task<List<TransactionHeadDto>> Handle(GetTransactionHeadsQuery request, CancellationToken cancellationToken)
         {
-            var transactionHeads = await _repository.GetAllAsync(
-              cancellationToken, x => x.Company != null &&
-                                 x.Branch != null &&
-                                 x.AccountHeadType != null &&
-                                 x.AccountSubHeadType != null
-          );
-            return _mapper.Map<List<TransactionHeadDto>>(transactionHeads);
+            var transactionHeads = await _repository.GetAllAsync(cancellationToken, x => x.Company,
+                                                                                            x => x.Branch,
+                                                                                            x => x.AccountHeadType,
+                                                                                            x => x.AccountSubHeadType);
+
+
+
+            var filteredTransactionHeads = transactionHeads
+                .Where(x => x.Company != null && x.Branch != null && x.AccountHeadType != null && x.AccountSubHeadType != null)
+                .ToList();
+
+
+            return _mapper.Map<List<TransactionHeadDto>>(filteredTransactionHeads);
         }
     }
 }
