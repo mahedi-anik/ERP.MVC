@@ -168,17 +168,60 @@
             }
         });
     }
+    // Function to handle Account Head Type change event
+    function handleAccountHeadTypeChange() {
+        var companyId = $('#CompanyId').val();
+        var branchId = $('#BranchId').val();
+        var accountHeadTypeId = $('#AccountHeadTypeId').val();
+
+        // Clear Account Sub Head Type dropdown before loading new data
+        $('#AccountSubHeadTypeId').html('<option>Loading...</option>');
+
+        // Fetch Account Sub Head Types based on selected Company, Branch, and Account Head Type
+        $.get('/TransactionHead/GetAccountSubHeadTypesByCompanyBranchAccountHeadId', { companyId: companyId, branchId: branchId, accountHeadTypeId: accountHeadTypeId }, function (response) {
+            if (response.success) {
+                // Sort the account sub head types in ascending order by name
+                response.accountSubHeadTypes.sort(function (a, b) {
+                    return a.accountSubHeadTypeName.localeCompare(b.accountSubHeadTypeName);
+                });
+
+                var accountSubHeadTypeOptions = '<option value="">Select Account Sub Head Type</option>';
+                $.each(response.accountSubHeadTypes, function (i, accountSubHeadType) {
+                    accountSubHeadTypeOptions += '<option value="' + accountSubHeadType.id + '">' + accountSubHeadType.accountSubHeadTypeName + '</option>';
+                });
+                $('#AccountSubHeadTypeId').html(accountSubHeadTypeOptions);
+            } else {
+                $('#AccountSubHeadTypeId').html('<option>No account sub head types found</option>');
+            }
+        });
+    }
 
     $(document).ready(function () {
         // Trigger the change event on page load to set the initial values
         var initialCompanyId = $('#CompanyId').val();
+        var initialBranchId = $('#BranchId').val();
+        var initialAccountHeadTypeId = $('#AccountHeadTypeId').val();
+        var initialAccountSubHeadTypeId = $('#AccountSubHeadTypeId').val();
         if (initialCompanyId) {
             handleCompanyChange();
+        }
+        if (initialBranchId && initialAccountHeadTypeId) {
+            handleAccountHeadTypeChange();
         }
 
         // Bind the change event to the Company dropdown
         $('#CompanyId').change(function () {
             handleCompanyChange();
         });
+        // Bind the change event to the Branch dropdown
+        $('#BranchId').change(function () {
+            handleAccountHeadTypeChange();
+        });
+
+        // Bind the change event to the Account Head Type dropdown
+        $('#AccountHeadTypeId').change(function () {
+            handleAccountHeadTypeChange();
+        });
+
     });
 </script>

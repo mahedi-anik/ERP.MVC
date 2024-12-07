@@ -225,9 +225,9 @@ namespace ERP.MVC.Web.Controllers
             return Json(new { success = true, accountHeadTypes });
         }
 
-        // GET: TransactionHead/GetAccountSubHeadTypesByCompanyId/{companyId}
+        // GET: TransactionHead/GetAccountSubHeadTypesByCompanyBranchAccountHeadId/{companyId}
         [HttpGet]
-        public async Task<IActionResult> GetAccountSubHeadTypesByCompanyId(string companyId, string branchId, string accountHeadTypeId)
+        public async Task<IActionResult> GetAccountSubHeadTypesByCompanyBranchAccountHeadId(string companyId, string branchId, string accountHeadTypeId)
         {
             if (string.IsNullOrEmpty(companyId) || string.IsNullOrEmpty(branchId) || string.IsNullOrEmpty(accountHeadTypeId))
             {
