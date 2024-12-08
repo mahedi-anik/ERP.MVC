@@ -26,6 +26,8 @@ namespace ERP.MVC.Infrastructure.Persistence
         public DbSet<AccountHeadType> AccountHeadTypes { get; set; }
         public DbSet<AccountSubHeadType> AccountSubHeadTypes { get; set; }
         public DbSet<TransactionHead> TransactionHeads { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<PaymentType> PaymentTypes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
