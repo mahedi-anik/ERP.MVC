@@ -17,6 +17,7 @@ namespace ERP.MVC.Domain.Entities.MasterData
         public virtual TransactionHead? TransactionHead { get; set; }
         public DateTime Date { get; set; }
         public string? VoucherNo { get; set; }
+        public string? VoucherType { get; set; }
         public decimal Cr { get; set; }
         public decimal Dr { get; set; }
         public string? PaymentTypeId { get; set; }
