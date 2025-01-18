@@ -88,7 +88,9 @@ builder.Services.AddScoped<IAccountHeadTypeRepository, AccountHeadTypeRepository
 builder.Services.AddScoped<IAccountSubHeadTypeRepository, AccountSubHeadTypeRepository>();
 builder.Services.AddScoped<ITransactionHeadRepository, TransactionHeadRepository>();
 builder.Services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
-
+builder.Services.AddScoped<IJournaVoucherRepository, JournaVoucherRepository>();
+builder.Services.AddScoped<ICreditVoucherRepository, CreditVoucherRepository>();
+builder.Services.AddScoped<IDebitVoucherRepository, DebitVoucherRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

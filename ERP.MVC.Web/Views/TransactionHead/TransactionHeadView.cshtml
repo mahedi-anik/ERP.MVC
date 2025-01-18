@@ -47,7 +47,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Company Name</label>
-                                <select asp-for="CompanyId" asp-items="ViewBag.Companies" class="form-select mb-3 is-valid" id="CompanyId">
+                                <select asp-for="CompanyId" asp-items="ViewBag.Companies" class="form-select mb-3 is-valid select-countries-valid" id="CompanyId">
                                     <option value="">Select Company</option>
                                 </select>
                                 <span asp-validation-for="CompanyId" class="text-danger"></span>
@@ -56,7 +56,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Branch Name</label>
-                                <select asp-for="BranchId" class="form-select mb-3 is-valid" id="BranchId">
+                                <select asp-for="BranchId" class="form-select mb-3 is-valid select-countries-valid" id="BranchId">
                                     <option value="">Select Branch</option>
                                 </select>
                                 <span asp-validation-for="BranchId" class="text-danger"></span>
@@ -67,7 +67,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Accounts Head Type Name</label>
-                                <select asp-for="AccountHeadTypeId" class="form-select mb-3 is-valid" id="AccountHeadTypeId">
+                                <select asp-for="AccountHeadTypeId" class="form-select mb-3 is-valid select-countries-valid" id="AccountHeadTypeId">
                                     <option value="">Select Account Head Type</option>
                                 </select>
                                 <span asp-validation-for="AccountHeadTypeId" class="text-danger"></span>
@@ -76,7 +76,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Accounts SUb Head Type Name</label>
-                                <select asp-for="AccountSubHeadTypeId" class="form-select mb-3 is-valid" id="AccountSubHeadTypeId">
+                                <select asp-for="AccountSubHeadTypeId" class="form-select mb-3 is-valid select-countries-valid" id="AccountSubHeadTypeId">
                                     <option value="">Select Account Sub Head Type</option>
                                 </select>
                                 <span asp-validation-for="AccountSubHeadTypeId" class="text-danger"></span>
@@ -127,9 +127,10 @@
         // Clear Branch and AccountHeadType dropdowns before loading new data
         $('#BranchId').html('<option>Loading...</option>');
         $('#AccountHeadTypeId').html('<option>Loading...</option>');
+        $('#AccountSubHeadTypeId').html('<option>Loading...</option>'); // Clear Account Sub Head Type
 
         // Fetch Branches based on selected Company
-        $.get('/AccountSubHeadType/GetBranchesByCompanyId', { companyId: companyId }, function (response) {
+        $.get('/TransactionHead/GetBranchesByCompanyId', { companyId: companyId }, function (response) {
             if (response.success) {
                 // Sort the branches in ascending order by branch name
                 response.branches.sort(function (a, b) {
@@ -143,13 +144,16 @@
                 $('#BranchId').html(branchOptions);
                 // Set the selected value for BranchId if editing
                 $('#BranchId').val('@Model.BranchId');
+
+                // Trigger change event to load Account Head Types
+                handleBranchChange(); // Call this function to load Account Head Types
             } else {
                 $('#BranchId').html('<option>No branches found</option>');
             }
         });
 
         // Fetch Account Head Types based on selected Company
-        $.get('/AccountSubHeadType/GetAccountHeadTypesByCompanyId', { companyId: companyId }, function (response) {
+        $.get('/TransactionHead/GetAccountHeadTypesByCompanyId', { companyId: companyId }, function (response) {
             if (response.success) {
                 // Sort the account head types in ascending order by name
                 response.accountHeadTypes.sort(function (a, b) {
@@ -163,11 +167,48 @@
                 $('#AccountHeadTypeId').html(accountHeadTypeOptions);
                 // Set the selected value for AccountHeadTypeId if editing
                 $('#AccountHeadTypeId').val('@Model.AccountHeadTypeId');
+
+                // Trigger change event to load Account Sub Head Types
+                handleAccountHeadTypeChange(); // Call this function to load Account Sub Head Types
             } else {
                 $('#AccountHeadTypeId').html('<option>No account head types found</option>');
             }
         });
     }
+
+    // Function to handle Branch change event
+    function handleBranchChange() {
+        var companyId = $('#CompanyId').val();
+        var branchId = $('#BranchId').val();
+
+        // Clear Account Head Type dropdown before loading new data
+        $('#AccountHeadTypeId').html('<option>Loading...</option>');
+        $('#AccountSubHeadTypeId').html('<option>Loading...</option>'); // Clear Account Sub Head Type
+
+        // Fetch Account Head Types based on selected Company and Branch
+        $.get('/TransactionHead/GetAccountHeadTypesByCompanyId', { companyId: companyId, branchId: branchId }, function (response) {
+            if (response.success) {
+                // Sort the account head types in ascending order by name
+                response.accountHeadTypes.sort(function (a, b) {
+                    return a.accountHeadTypeName.localeCompare(b.accountHeadTypeName);
+                });
+
+                var accountHeadTypeOptions = '<option value="">Select Account Head Type</option>';
+                $.each(response.accountHeadTypes, function (i, accountHeadType) {
+                    accountHeadTypeOptions += '<option value="' + accountHeadType.id + '">' + accountHeadType.accountHeadTypeName + '</option>';
+                });
+                $('#AccountHeadTypeId').html(accountHeadTypeOptions);
+                // Set the selected value for AccountHeadTypeId if editing
+                $('#AccountHeadTypeId').val('@Model.AccountHeadTypeId');
+
+                // Trigger change event to load Account Sub Head Types
+                handleAccountHeadTypeChange(); // Call this function to load Account Sub Head Types
+            } else {
+                $('#AccountHeadTypeId').html('<option>No account head types found</option>');
+            }
+        });
+    }
+
     // Function to handle Account Head Type change event
     function handleAccountHeadTypeChange() {
         var companyId = $('#CompanyId').val();
@@ -190,6 +231,9 @@
                     accountSubHeadTypeOptions += '<option value="' + accountSubHeadType.id + '">' + accountSubHeadType.accountSubHeadTypeName + '</option>';
                 });
                 $('#AccountSubHeadTypeId').html(accountSubHeadTypeOptions);
+
+                // Set the selected value for AccountSubHeadTypeId if editing
+                $('#AccountSubHeadTypeId').val('@Model.AccountSubHeadTypeId'); // Ensure this is set correctly
             } else {
                 $('#AccountSubHeadTypeId').html('<option>No account sub head types found</option>');
             }
@@ -201,7 +245,8 @@
         var initialCompanyId = $('#CompanyId').val();
         var initialBranchId = $('#BranchId').val();
         var initialAccountHeadTypeId = $('#AccountHeadTypeId').val();
-        var initialAccountSubHeadTypeId = $('#AccountSubHeadTypeId').val();
+        var initialAccountSubHeadTypeId = $('#AccountSubHeadTypeId').val(); // Get initial value for Account Sub Head Type
+
         if (initialCompanyId) {
             handleCompanyChange();
         }
@@ -213,15 +258,15 @@
         $('#CompanyId').change(function () {
             handleCompanyChange();
         });
+
         // Bind the change event to the Branch dropdown
         $('#BranchId').change(function () {
-            handleAccountHeadTypeChange();
+            handleBranchChange(); // Call this function to load Account Head Types
         });
 
         // Bind the change event to the Account Head Type dropdown
         $('#AccountHeadTypeId').change(function () {
             handleAccountHeadTypeChange();
         });
-
     });
 </script>

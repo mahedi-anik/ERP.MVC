@@ -612,7 +612,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var el;
-            window.TomSelect && (new TomSelect(el = document.getElementById('select-countries-valid'), {
+            window.TomSelect && (new TomSelect(el = document.querySelector('.select-countries-valid'), {
                 copyClassesToDropdown: false,
                 dropdownParent: 'body',
                 controlInput: '<input>',
