@@ -1,7 +1,7 @@
-﻿@model ERP.MVC.Application.DTOs.AccountsHeadTypeDto
+﻿@model ERP.MVC.Application.DTOs.PaymentTypeDto
 
 @{
-    ViewData["Title"] = Model.Id == null ? "Create Accounts Head Type" : "Update Accounts Head Type";
+    ViewData["Title"] = Model.Id == null ? "Create Payment Type" : "Update Payment Type";
 }
 
 <div class="row">
@@ -13,9 +13,9 @@
         </li>
         <li class="breadcrumb-item"><a href="#">Home</a></li>
         <li class="breadcrumb-item"><a href="#">Accounts</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><a href="#">Accounts Head Type View</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="#">Payment Type View</a></li>
         <li class="breadcrumb-item active" aria-current="page">
-            <a href="#">@((Model.Id == null) ? "Create Accounts Head Type" : "Update Accounts Head Type")</a>
+            <a href="#">@((Model.Id == null) ? "Create Payment Type" : "Update Payment Type")</a>
         </li>
     </ol>
 </div>
@@ -41,23 +41,21 @@
                 <h4 class="card-title">@ViewData["Title"]</h4>
             </div>
             <div class="card-body">
-                <form asp-action="@(Model.Id == null ? "AccountHeadTypeView" : "Edit")" method="post" enctype="multipart/form-data">
+                <form asp-action="@(Model.Id == null ? "PaymentTypeView" : "Edit")" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="Id" />
                     <div class="row row-cards">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Company Name</label>
-                                <select type="text" class="form-select mb-3 is-valid" data-id="select-countries-valid" asp-for="CompanyId" asp-items="ViewBag.Companies">
-                                    <option value="">Select Company</option>
-                                </select>
-                                <span asp-validation-for="CompanyId" class="text-danger"></span>
+                                <label class="form-label">Financial Year</label>
+                                <input asp-for="PaymentTypeName" type="text" class="form-control" placeholder="Payment Type Name" />
+                                <span asp-validation-for="PaymentTypeName" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Accounts Head Type Name</label>
-                                <input asp-for="AccountHeadTypeName" type="text" class="form-control" placeholder="Accounts Head Type Name" />
-                                <span asp-validation-for="AccountHeadTypeName" class="text-danger"></span>
+                                <label class="form-label">Remarks</label>
+                                <input asp-for="Remarks" type="text" class="form-control" placeholder="Remarks" />
+                                <span asp-validation-for="Remarks" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -75,7 +73,7 @@
                     <div class="row row-cards">
                         <div class="col-md-12" style="text-align:right">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <a asp-action="AccountHeadTypeList" class="btn btn-secondary">Cancel</a>
+                            <a asp-action="PaymentTypeList" class="btn btn-secondary">Cancel</a>
                         </div>
                     </div>
                 </form>

@@ -1,15 +1,15 @@
 ﻿@using Newtonsoft.Json;
-@model List<ERP.MVC.Application.DTOs.FinancialYearDto>
+@model List<ERP.MVC.Application.DTOs.PaymentTypeDto>
 
 @{
-    ViewData["Title"] = "Financial Year List";
+    ViewData["Title"] = "Payment Type List";
 }
 
 <div class="row">
     <ol class="breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
         <li class="breadcrumb-item"><a href="#">Accounts</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><a href="#">Financial Year List</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="#">Payment Types List</a></li>
     </ol>
 </div>
 <!-- Alert Section -->
@@ -31,13 +31,13 @@
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Financial Year List</h3>
-            &nbsp;<a asp-controller="FinancialYear" asp-action="FinancialYearView" class="btn-success">
+            <h3 class="card-title">Payment Type List</h3>
+            &nbsp;<a asp-controller="PaymentType" asp-action="PaymentTypeView" class="btn-success">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M9 12h6" /><path d="M12 9v6" /></svg>
             </a>
         </div>
         <div class="card-body border-bottom py-3">
-            <form method="get" asp-action="FinancialYearList">
+            <form method="get" asp-action="PaymentTypeList">
                 <div class="d-flex">
                     @* <div class="text-secondary">
                     Show
@@ -49,7 +49,7 @@
                     <div class="ms-auto text-secondary">
                         Search:
                         <div class="ms-2 d-inline-block">
-                            <input type="text" name="search" class="form-control form-control-sm" value="@ViewBag.SearchQuery" placeholder="financial year...">
+                            <input type="text" name="search" class="form-control form-control-sm" value="@ViewBag.SearchQuery" placeholder="payment type...">
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm ms-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
@@ -64,16 +64,10 @@
                 <thead>
                     <tr>
                         <th>
-                            <a href="javascript:void(0);" onclick="sort('CompanyName')">Company Name</a>
+                            <a href="javascript:void(0);" onclick="sort('PaymentTypeName')">Payment Type Name</a>
                         </th>
                         <th>
-                            <a href="javascript:void(0);" onclick="sort('FinancialYearName')">Financial Year</a>
-                        </th>
-                        <th>
-                            <a href="javascript:void(0);" onclick="sort('StartDate')">Start Date</a>
-                        </th>
-                        <th>
-                            <a href="javascript:void(0);" onclick="sort('EndDate')">End Date</a>
+                            <a href="javascript:void(0);" onclick="sort('Remarks')">Remarks</a>
                         </th>
                         <th>
                             <a href="javascript:void(0);" onclick="sort('Isactive')">Isactive</a>
@@ -82,19 +76,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var financialYear in Model)
+                    @foreach (var paymentType in Model)
                     {
                         <tr>
-                            <td>@financialYear.CompanyName</td>
-                            <td>@financialYear.FinancialYearName</td>
-                            <td>@(financialYear.StartDate?.ToString("MM/dd/yyyy") ?? "")</td>
-                            <td>@(financialYear.EndDate?.ToString("MM/dd/yyyy") ?? "")</td>
-                            <td>@(financialYear.IsActive ? "Active" : "Inactive")</td>
+                            <td>@paymentType.PaymentTypeName</td>
+                            <td>@paymentType.Remarks</td>
+                            <td>@(paymentType.IsActive ? "Active" : "Inactive")</td>
                             <td>
-                                <a asp-controller="FinancialYear" asp-action="Edit" asp-route-id="@financialYear.Id" class="btn-warning">
+                                <a asp-controller="PaymentType" asp-action="Edit" asp-route-id="@paymentType.Id" class="btn-warning">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
                                 </a>
-                               
+
                             </td>
                         </tr>
                     }
@@ -107,7 +99,7 @@
                 @for (int i = 1; i <= (int)Math.Ceiling((double)ViewBag.TotalEntries / ViewBag.PageSize); i++)
                 {
                     <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-                        <a class="page-link" asp-action="FinancialYearList" asp-route-page="@i" asp-route-search="@ViewBag.SearchQuery" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                        <a class="page-link" asp-action="PaymentTypeList" asp-route-page="@i" asp-route-search="@ViewBag.SearchQuery" asp-route-pageSize="@ViewBag.PageSize">@i</a>
                     </li>
                 }
             </ul>
@@ -120,7 +112,7 @@
         var currentSortOrder = '@ViewBag.SortOrder';
         var newSortOrder = currentSortField === field && currentSortOrder === 'asc' ? 'desc' : 'asc';
 
-        window.location.href = '@Url.Action("FinancialYearList", "FinancialYear")' +
+        window.location.href = '@Url.Action("PaymentTypeList", "PaymentType")' +
             '?search=' + '@ViewBag.SearchQuery' +
             '&page=' + '@ViewBag.CurrentPage' +
             '&pageSize=' + '@ViewBag.PageSize' +

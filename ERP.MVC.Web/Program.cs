@@ -3,6 +3,7 @@ using ERP.MVC.Application.Commands.AccountSubHeadTypes;
 using ERP.MVC.Application.Commands.Branches;
 using ERP.MVC.Application.Commands.Companies;
 using ERP.MVC.Application.Commands.FinancialYears;
+using ERP.MVC.Application.Commands.PaymentTypes;
 using ERP.MVC.Application.Commands.TransactionHeads;
 using ERP.MVC.Application.Mappers;
 using ERP.MVC.Application.Queries.AccountHeadTypes;
@@ -10,6 +11,7 @@ using ERP.MVC.Application.Queries.AccountSubHeadTypes;
 using ERP.MVC.Application.Queries.Branches;
 using ERP.MVC.Application.Queries.Company;
 using ERP.MVC.Application.Queries.FinancialYears;
+using ERP.MVC.Application.Queries.PaymentTypes;
 using ERP.MVC.Application.Queries.TransactionHeads;
 using ERP.MVC.Domain.Interfaces;
 using ERP.MVC.Infrastructure.Middleware;
@@ -54,7 +56,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetFi
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAccountsHeadTypesQueryHandler).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAccountsSubHeadTypesQueryHandler).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetTransactionHeadsQueryHandler).Assembly));
-
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetPaymentTypesQueryHandler).Assembly));
 
 
 
@@ -65,7 +67,7 @@ builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyCont
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateAccountHeadTypeCommandValidator>());
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateAccountSubHeadTypeCommandValidator>());
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateTransactionHeadCommandValidator>());
-
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePaymentTypeCommandValidator>());
 
 
 // Add AutoMapper
@@ -85,8 +87,10 @@ builder.Services.AddScoped<IFinancialYearRepository, FinancialYearRepository>();
 builder.Services.AddScoped<IAccountHeadTypeRepository, AccountHeadTypeRepository>();
 builder.Services.AddScoped<IAccountSubHeadTypeRepository, AccountSubHeadTypeRepository>();
 builder.Services.AddScoped<ITransactionHeadRepository, TransactionHeadRepository>();
-
-
+builder.Services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
+builder.Services.AddScoped<IJournaVoucherRepository, JournaVoucherRepository>();
+builder.Services.AddScoped<ICreditVoucherRepository, CreditVoucherRepository>();
+builder.Services.AddScoped<IDebitVoucherRepository, DebitVoucherRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

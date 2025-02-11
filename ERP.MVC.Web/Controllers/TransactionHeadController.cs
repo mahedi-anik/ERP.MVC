@@ -168,7 +168,7 @@ namespace ERP.MVC.Web.Controllers
             ViewBag.AccountHeadTypes = new SelectList(accountsHeadTypes, "Id", "AccountHeadTypeName", transactionHead.AccountHeadTypeId);
 
             var accountsSubHeadTypes = await _mediator.Send(new GetAccountSubHeadTypeByCompanyBranchAccountsHeadTypeIdQuery { CompanyId = transactionHead.CompanyId, BranchId = transactionHead.BranchId, AccountHeadTypeId = transactionHead.AccountHeadTypeId });
-            ViewBag.AccountSubHeadTypes = new SelectList(accountsHeadTypes, "Id", "AccountHeadTypeName", transactionHead.AccountHeadTypeId);
+            ViewBag.AccountSubHeadTypes = new SelectList(accountsSubHeadTypes, "Id", "AccountSubHeadTypeName", transactionHead.AccountSubHeadTypeId);
 
             return View("TransactionHeadView", transactionHead);
         }
@@ -225,9 +225,9 @@ namespace ERP.MVC.Web.Controllers
             return Json(new { success = true, accountHeadTypes });
         }
 
-        // GET: TransactionHead/GetAccountSubHeadTypesByCompanyId/{companyId}
+        // GET: TransactionHead/GetAccountSubHeadTypesByCompanyBranchAccountHeadId/{companyId}
         [HttpGet]
-        public async Task<IActionResult> GetAccountSubHeadTypesByCompanyId(string companyId, string branchId, string accountHeadTypeId)
+        public async Task<IActionResult> GetAccountSubHeadTypesByCompanyBranchAccountHeadId(string companyId, string branchId, string accountHeadTypeId)
         {
             if (string.IsNullOrEmpty(companyId) || string.IsNullOrEmpty(branchId) || string.IsNullOrEmpty(accountHeadTypeId))
             {
